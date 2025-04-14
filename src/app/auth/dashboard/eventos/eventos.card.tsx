@@ -33,7 +33,7 @@ export default function EventoCard({ evento }: { evento: IEvento }) {
 		<>
 			<Card className="pt-0">
 				<img
-					className="rounded-t-2xl w-100 aspect-square"
+					className="rounded-t-2xl aspect-square w-full max-h-1/2"
 					src={imagem}
 					alt="imagem de evento"
 					width="150"

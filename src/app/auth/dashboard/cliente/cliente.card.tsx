@@ -80,7 +80,6 @@ export default function ClienteCard({ cliente }: { cliente: ICliente }) {
 			}
 		},
 		onSuccess: (data: ICliente | IException) => {
-			console.log(data);
 			if ("message" in data) {
 				toast.error(data.message);
 			} else {
