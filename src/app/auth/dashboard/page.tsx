@@ -1,12 +1,16 @@
 "use client";
 
 import ClientTable from "@/app/auth/dashboard/cliente/cliente.table";
+import LoaderComponent from "@/components/shared/loader/loader";
+import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/query";
+import { useCursor } from "@/providers/cursor.provider";
 import { findAllAgendamentos } from "@/services/agendamento.service";
 import { findAllClients } from "@/services/cliente.service";
 import { findAllWorkers } from "@/services/funcionario.service";
 import { IAgendamento } from "@/types/IAgendamentos";
 import { ICliente } from "@/types/ICliente";
+import { IEvento } from "@/types/IEvento";
 import { IException } from "@/types/IException";
 import { IFuncionario } from "@/types/IFuncionario";
 import { IPagination } from "@/types/IPgaination";
@@ -15,11 +19,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import AgendamentoTable from "./agendamento/agendamento.table";
 import ClienteCard from "./cliente/cliente.card";
-import FuncionarioTable from "./funcionario/funcionario.table";
-import { useCursor } from "@/providers/cursor.provider";
-import { Button } from "@/components/ui/button";
-import LoaderComponent from "@/components/shared/loader/loader";
 import EventoCard from "./eventos/eventos.card";
+import FuncionarioTable from "./funcionario/funcionario.table";
 
 const assertLoadingState = (loading: boolean[] | null) => {
 	if (loading?.some((l) => l === true)) {
@@ -115,6 +116,7 @@ export default function Dashboard() {
 
 	function changeIndex(index: number) {
 		setIndex(index);
+		setItem(null)
 		setPage({ currentPage: 0, size: 10 });
 	}
 
@@ -127,13 +129,23 @@ export default function Dashboard() {
 
 	console.log(clientPagination);
 
+	const evento: IEvento = {
+		imagem: "https://i.pinimg.com/736x/f4/67/1a/f4671aecc3b283d3a1e5d93d8ba0d5c4.jpg",
+		titulo: "Título padrão",
+		descricao: "evento de teste",
+		organizadoPor: "Organizador",
+		dataEvento: new Date(),
+		acompanhar: "remoto",
+		localidade: "Local não informado",
+		website: "#",
+	};
+
 	return (
 		<main className="h-[calc(100dvh_-_var(--spacing)_*_25)] flex px-20 pt-10 pb-4 gap-5">
 			<div className="shadow-[0_0_0.2rem_black] rounded-t-2xl min-w-[350px] flex-1 py-8 px-4 hidden lg:flex flex-col">
-				<EventoCard/>
+				{!item && <EventoCard evento={evento} />}
 				{item && (
 					<div className="mt-6 p-4 bg-gray-100 rounded">
-						{item == null && index === 3 && <EventoCard/>}
 						{item && (
 							<Button
 								className="bg-[#710101]"
@@ -240,7 +252,7 @@ export default function Dashboard() {
 						].filter((e) => e !== null && e !== undefined)
 					)}
 				</div>
-				
+
 				<div className="overflow-auto mb-8 ">
 					{index === 0 && getPaginationData(clientPagination) && (
 						<ClientTable

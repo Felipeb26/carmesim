@@ -9,32 +9,24 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { IEvento } from "@/types/IEvento";
 import { formatarStringDate, formatarStringDateZulu } from "@/utils/format";
 import { addHours } from "date-fns";
 import { Calendar } from "lucide-react";
 import Link from "next/link";
 
-interface Evento {
-	imagem: string;
-	titulo: string;
-	descricao: string;
-	organizadoPor: string;
-	dataEvento: Date | string;
-	acompanhar: "remoto" | "presencial" | "hibrido";
-	localidade: string;
-	website: string;
-}
+export default function EventoCard({ evento }: { evento: IEvento }) {
+	const {
+		imagem,
+		titulo,
+		descricao,
+		organizadoPor,
+		dataEvento,
+		acompanhar,
+		localidade,
+		website,
+	} = evento;
 
-export default function EventoCard({
-	imagem = "https://i.pinimg.com/736x/f4/67/1a/f4671aecc3b283d3a1e5d93d8ba0d5c4.jpg",
-	titulo = "Título padrão",
-	descricao = "evento de teste",
-	organizadoPor = "Organizador",
-	dataEvento = new Date(),
-	acompanhar = "remoto",
-	localidade = "Local não informado",
-	website = "#",
-}: Evento) {
 	const dataFinal = dataEvento;
 
 	return (
