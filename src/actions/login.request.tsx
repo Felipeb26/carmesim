@@ -2,8 +2,9 @@
 
 import { loginUser } from "@/services/auth.service";
 import { IException } from "@/types/IException";
-import { saveCookie } from "@/utils/cookie";
+import { deleteCookie, saveCookie } from "@/utils/cookie";
 import { getErrorMessage } from "@/utils/error_message";
+import { redirect } from "next/navigation";
 
 export async function loginAction(formData: FormData) {
 	try {
@@ -29,4 +30,9 @@ export async function loginAction(formData: FormData) {
 	} catch (err: unknown) {
 		return { sucess: false, message: getErrorMessage(err) };
 	}
+}
+
+export async function exitLogin(){
+	await deleteCookie("token")
+	.then(() => redirect("/"))
 }

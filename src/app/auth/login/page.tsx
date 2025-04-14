@@ -13,7 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useCursor } from "@/providers/cursor.provider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Github } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -71,10 +72,10 @@ export default function Login() {
 
 	return (
 		<>
-			<div className="h-[calc(90.6dvh_-_var(--spacing)_*_25)] bg w-full flex justify-center py-30">
+			<div className="h-[calc(90.6dvh_-_var(--spacing)_*_25)] bg w-full flex justify-center py-20 lg:py-30">
 				<Form {...form}>
 					<form
-						className="shadow-[0_0_0.5rem_black] rounded-2xl p-8 px-15 flex flex-col gap-6 w-1/3 min-w-[350px]"
+						className="shadow-[0_0_0.5rem_black] rounded-2xl p-8 px-15 flex flex-col gap-6 w-1/3 min-w-[350px] h-fit"
 						onSubmit={form.handleSubmit(submitForm)}
 					>
 						<h1 className="mb-10 text-2xl font-bold underline text-center">
@@ -173,17 +174,22 @@ export default function Login() {
 							</a>
 						</div>
 
-						<div className="w-full flex flex-row justify-center items-center gap-8 my-4 sm:hidden">
-							<button
+						<div className="w-full flex flex-row justify-center items-center gap-8 my-4">
+							<Button
 								type="button"
 								className="bg-white text-red-500 font-bold uppercase border-2 border-black py-2 p-4 rounded-lg"
 							>
+								<Image
+									src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+									alt="login google" width={15} height={15}
+								/>
 								google
-							</button>
+							</Button>
 							<Button
 								type="button"
-								className="bg-white text-black uppercase font-bold border-2 border-black py-2 px-4 rounded-lg "
+								className="bg-white text-black uppercase font-bold border-2 border-black py-2 px-4 rounded-lg hover:text-white"
 							>
+								<Github />
 								github
 							</Button>
 						</div>

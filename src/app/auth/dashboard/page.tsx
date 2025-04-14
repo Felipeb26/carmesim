@@ -4,6 +4,13 @@ import ClientTable from "@/app/auth/dashboard/cliente/cliente.table";
 import LoaderComponent from "@/components/shared/loader/loader";
 import { Button } from "@/components/ui/button";
 import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
+import {
 	ResizableHandle,
 	ResizablePanel,
 	ResizablePanelGroup,
@@ -26,6 +33,7 @@ import AgendamentoTable from "./agendamento/agendamento.table";
 import ClienteCard from "./cliente/cliente.card";
 import EventoCard from "./eventos/eventos.card";
 import FuncionarioTable from "./funcionario/funcionario.table";
+import { isMobileScreen } from "@/hooks/use-mobile";
 
 const assertLoadingState = (loading: boolean[] | null) => {
 	if (loading?.some((l) => l === true)) {
@@ -67,7 +75,7 @@ export default function Dashboard() {
 		data: funcionarioPagination,
 		error: errorFuncionario,
 		isLoading: loadingFuncionario,
-		isRefetching: refetchingFuncionario
+		isRefetching: refetchingFuncionario,
 	} = useRequest({
 		key: ["funcionarios", page],
 		request: () =>
@@ -146,8 +154,62 @@ export default function Dashboard() {
 		website: "#",
 	};
 
+	const handleOpenState = (open: boolean) => {
+		if (!open) {
+			setItem(null);
+		}
+	};
+
+	const customDialog = () => {
+		return (
+			<>
+				<Dialog open={item != null} onOpenChange={handleOpenState}>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle className="text-center font-bold tracking-wide">
+								Alteração / Deleção
+							</DialogTitle>
+							<DialogDescription></DialogDescription>
+						</DialogHeader>
+						{item && "dataNascimento" in item && (
+							<ClienteCard cliente={item} />
+						)}
+						{item && "dataHoraAgendada" in item && (
+							<div>
+								<p>
+									<strong>Data agendada:</strong>
+									{item.dataHoraAgendada}
+								</p>
+								<p>
+									<strong>Status:</strong> {item.status}
+								</p>
+								<p>
+									<strong>Preço estimado:</strong> R$
+									{item.precoEstimado?.toFixed(2)}
+								</p>
+								<p>
+									<strong>Pago:</strong>
+									{item.pago ? "Sim" : "Não"}
+								</p>
+								{item.observacao && (
+									<p>
+										<strong>Obs:</strong> {item.observacao}
+									</p>
+								)}
+							</div>
+						)}
+					</DialogContent>
+				</Dialog>
+			</>
+		);
+	};
+
 	return (
 		<main className="h-[calc(100dvh_-_var(--spacing)_*_25)] lg:flex lg:px-20 pt-10 pb-4 gap-5">
+			<div className="block sm:hidden">
+				{item && isMobileScreen() && customDialog()}
+			</div>
+
 			<ResizablePanelGroup direction="horizontal" className="h-full">
 				<ResizablePanel
 					className="rounded-t-2xl py-8 px-4 flex-col hidden lg:flex"
@@ -204,7 +266,7 @@ export default function Dashboard() {
 					minSize={30}
 					className="rounded-t-2xl px-8 pb-8 pt-4"
 				>
-					<div className="bg-gray-50 mb-4 rounded-lg flex flex-row gap-4 items-center border-b-5 border-gray-400 flex-wrap">
+					<div className="bg-gray-50 mb-4 rounded-lg gap-4 items-center border-b-5 border-gray-400 flex-wrap sm:flex-row grid grid-cols-2 sm:grid-cols-none sm:flex">
 						<h1
 							className={`text-lg font-bold tracking-wide p-4 rounded-sm rounded-t-lg cursor-pointer transition duration-300
 							${

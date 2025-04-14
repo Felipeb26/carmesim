@@ -90,6 +90,28 @@ a {
   transition: all 0.5s ease-in-out;
 }
 
+.link a:after {
+  content: "";
+  position: absolute;
+  background-color: var(--color950);
+  width: 125%;
+  height: 5px;
+  left: -10%;
+  right: 0;
+  bottom: -0.3rem;
+  transition: all 0.5s ease-in-out;
+  transform: scale(0, 0.8);
+}
+
+.link a:hover {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.link a:hover::after {
+  transform: scale(0.8, 0.8);
+}
+
 button {
   text-transform: uppercase;
   cursor: pointer;
