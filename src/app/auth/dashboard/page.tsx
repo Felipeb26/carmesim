@@ -1,0 +1,321 @@
+"use client";
+
+import ClientTable from "@/app/auth/dashboard/cliente/cliente.table";
+import { useRequest } from "@/hooks/query";
+import { findAllAgendamentos } from "@/services/agendamento.service";
+import { findAllClients } from "@/services/cliente.service";
+import { findAllWorkers } from "@/services/funcionario.service";
+import { IAgendamento } from "@/types/IAgendamentos";
+import { ICliente } from "@/types/ICliente";
+import { IException } from "@/types/IException";
+import { IFuncionario } from "@/types/IFuncionario";
+import { IPagination } from "@/types/IPgaination";
+import { isException } from "@/utils/error_message";
+import { useState } from "react";
+import { toast } from "sonner";
+import AgendamentoTable from "./agendamento/agendamento.table";
+import ClienteCard from "./cliente/cliente.card";
+import FuncionarioTable from "./funcionario/funcionario.table";
+import { useCursor } from "@/providers/cursor.provider";
+import { Button } from "@/components/ui/button";
+import LoaderComponent from "@/components/shared/loader/loader";
+import EventoCard from "./eventos/eventos.card";
+
+const assertLoadingState = (loading: boolean[] | null) => {
+	if (loading?.some((l) => l === true)) {
+		return <LoaderComponent show={true} />;
+	}
+	return null;
+};
+
+export default function Dashboard() {
+	const [item, setItem] = useState<
+		ICliente | IFuncionario | IAgendamento | null
+	>(null);
+	const [page, setPage] = useState({ currentPage: 0, size: 10 });
+	const [index, setIndex] = useState(3);
+	const { setLoading } = useCursor();
+
+	const {
+		data: clientPagination,
+		error: errorClient,
+		isLoading: loadingCliente,
+	} = useRequest({
+		key: ["clientes", page],
+		request: () => {
+			try {
+				setLoading(true);
+				return findAllClients({
+					page: page.currentPage,
+					size: page.size,
+				});
+			} finally {
+				setLoading(false);
+			}
+		},
+		enabled: index === 0,
+	});
+
+	const {
+		data: funcionarioPagination,
+		error: errorFuncionario,
+		isLoading: loadingFuncionario,
+	} = useRequest({
+		key: ["funcionarios", page],
+		request: () =>
+			findAllWorkers({ page: page.currentPage, size: page.size }),
+		enabled: index === 1,
+		refetchInterval: 5 * 30 * 100,
+	});
+
+	const {
+		data: agendamentoPagination,
+		error: errorAgendamento,
+		isLoading: loadingAgedamento,
+	} = useRequest({
+		key: ["agendamentos", page],
+		request: () =>
+			findAllAgendamentos({
+				page: page.currentPage,
+				size: page.size,
+			}),
+		enabled: index === 2,
+		refetchInterval: 5 * 30 * 100,
+	});
+
+	const handleError = (errors: Error[] | null) => {
+		if (errors && errors.length > 0) {
+			errors.forEach((error) => toast.error(error.message));
+		}
+	};
+
+	handleError(
+		[errorClient, errorFuncionario, errorAgendamento].filter(
+			(e): e is Error => e !== null && e !== undefined
+		)
+	);
+
+	const totalPages =
+		(clientPagination &&
+			!isException(clientPagination) &&
+			clientPagination?.totalPages) ||
+		(funcionarioPagination &&
+			!isException(funcionarioPagination) &&
+			funcionarioPagination?.totalPages) ||
+		(agendamentoPagination &&
+			!isException(agendamentoPagination) &&
+			agendamentoPagination?.totalPages) ||
+		0;
+
+	const handlePageChange = (pageNumber: number) => {
+		if (pageNumber >= 1 && pageNumber <= totalPages) {
+			setPage({ currentPage: pageNumber, size: page.size });
+		}
+	};
+
+	function changeIndex(index: number) {
+		setIndex(index);
+		setPage({ currentPage: 0, size: 10 });
+	}
+
+	function getPaginationData<T>(
+		data: IException | IPagination<T> | undefined
+	): IPagination<T> | null {
+		if (!data || isException(data)) return null;
+		return data;
+	}
+
+	console.log(clientPagination);
+
+	return (
+		<main className="h-[calc(100dvh_-_var(--spacing)_*_25)] flex px-20 pt-10 pb-4 gap-5">
+			<div className="shadow-[0_0_0.2rem_black] rounded-t-2xl min-w-[350px] flex-1 py-8 px-4 hidden lg:flex flex-col">
+				<EventoCard/>
+				{item && (
+					<div className="mt-6 p-4 bg-gray-100 rounded">
+						{item == null && index === 3 && <EventoCard/>}
+						{item && (
+							<Button
+								className="bg-[#710101]"
+								onClick={() => setItem(null)}
+							>
+								Limpar
+							</Button>
+						)}
+						{"dataNascimento" in item && (
+							<ClienteCard cliente={item} />
+						)}
+						{"dataHoraAgendada" in item && (
+							<div>
+								<p>
+									<strong>Data agendada:</strong>
+									{item.dataHoraAgendada}
+								</p>
+								<p>
+									<strong>Status:</strong> {item.status}
+								</p>
+								<p>
+									<strong>Preço estimado:</strong> R$
+									{item.precoEstimado?.toFixed(2)}
+								</p>
+								<p>
+									<strong>Pago:</strong>
+									{item.pago ? "Sim" : "Não"}
+								</p>
+								{item.observacao && (
+									<p>
+										<strong>Obs:</strong> {item.observacao}
+									</p>
+								)}
+							</div>
+						)}
+					</div>
+				)}
+			</div>
+
+			<div className="shadow-[0_0_0.2rem_black] rounded-t-2xl min-w-[350px] flex-4 px-8 pb-8 pt-4">
+				<div className="bg-gray-50 mb-4 rounded-lg flex flex-row gap-4 items-center border-b-5 border-gray-400">
+					<h1
+						className={`text-lg font-bold tracking-wide p-4 rounded-sm rounded-t-lg cursor-pointer transition duration-300
+							${
+								index === 0
+									? "bg-gray-400 bg-opacity-100"
+									: "bg-gray-300 bg-opacity-50 text-gray-500"
+							}`}
+						onClick={() => changeIndex(0)}
+						title="Clientes"
+					>
+						Clientes
+					</h1>
+					<h1
+						className={`text-lg font-bold tracking-wide p-4 rounded-lg cursor-pointer transition duration-300 bg-gray-300
+							${
+								index === 1
+									? "bg-gray-400 bg-opacity-100"
+									: "bg-gray-300 bg-opacity-30 text-gray-500"
+							}`}
+						onClick={() => changeIndex(1)}
+						title="Funcionarios"
+					>
+						Funcionarios
+					</h1>
+					<h1
+						className={`text-lg font-bold tracking-wide p-4 rounded-lg cursor-pointer transition duration-300 bg-gray-300
+							${
+								index === 2
+									? "bg-gray-400 bg-opacity-100"
+									: "bg-gray-300 bg-opacity-30 text-gray-500"
+							}`}
+						onClick={() => changeIndex(2)}
+						title="Agendamentos"
+					>
+						Agendamentos
+					</h1>
+					<h1
+						className={`text-lg font-bold tracking-wide p-4 rounded-lg cursor-pointer transition duration-300 bg-gray-300
+							${
+								index === 3
+									? "bg-gray-400 bg-opacity-100"
+									: "bg-gray-300 bg-opacity-30 text-gray-500"
+							}`}
+						onClick={() => changeIndex(3)}
+						title="Eventos"
+					>
+						Eventos
+					</h1>
+				</div>
+
+				<div className="mb-4 p-2 flex flex-row gap-6">
+					<button className="uppercase bg-[#710101] text-white px-4 py-2 rounded-lg">
+						pdf
+					</button>
+					<button className="uppercase px-4 py-2 bg-green-800 text-white rounded-lg">
+						csv
+					</button>
+					{assertLoadingState(
+						[
+							loadingFuncionario,
+							loadingAgedamento,
+							loadingCliente,
+						].filter((e) => e !== null && e !== undefined)
+					)}
+				</div>
+				
+				<div className="overflow-auto mb-8 ">
+					{index === 0 && getPaginationData(clientPagination) && (
+						<ClientTable
+							pagination={getPaginationData(clientPagination)!}
+							setItem={setItem}
+						/>
+					)}
+					{index === 1 &&
+						getPaginationData(funcionarioPagination) && (
+							<FuncionarioTable
+								pagination={
+									getPaginationData(funcionarioPagination)!
+								}
+								setItem={setItem}
+							/>
+						)}
+					{index === 2 &&
+						getPaginationData(agendamentoPagination) && (
+							<AgendamentoTable
+								pagination={
+									getPaginationData(agendamentoPagination)!
+								}
+								setItem={setItem}
+							/>
+						)}
+				</div>
+
+				<div className="flex justify-between items-center mt-4">
+					<div className="flex - flex-row gap-4">
+						<select
+							id="pageSize"
+							value={page.size}
+							onChange={(e) => {
+								setPage({
+									currentPage: 0,
+									size: Number(e.target.value),
+								});
+							}}
+							className="border p-2 rounded"
+						>
+							<option value={1}>1</option>
+							<option value={5}>5</option>
+							<option value={10}>10</option>
+							<option value={15}>15</option>
+							<option value={20}>20</option>
+						</select>
+
+						<button
+							disabled={page.currentPage === 0}
+							onClick={() =>
+								handlePageChange(page.currentPage - 1)
+							}
+							className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+						>
+							Anterior
+						</button>
+					</div>
+
+					<span>
+						Página{" "}
+						{totalPages <= 0
+							? page.currentPage
+							: page.currentPage + 1}{" "}
+						de {totalPages}
+					</span>
+
+					<button
+						disabled={page.currentPage + 1 === totalPages}
+						onClick={() => handlePageChange(page.currentPage + 1)}
+						className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+					>
+						Próxima
+					</button>
+				</div>
+			</div>
+		</main>
+	);
+}
