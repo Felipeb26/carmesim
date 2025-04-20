@@ -1,6 +1,6 @@
 "use client";
 
-import ClientTable from "@/app/auth/dashboard/cliente/cliente.table";
+import ClientTable from "@/app/(private)/dashboard/cliente/cliente.table";
 import LoaderComponent from "@/components/shared/loader/loader";
 import { Button } from "@/components/ui/button";
 import {

@@ -8,6 +8,8 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 import "./globals.css";
 import { CursorProvider } from "@/providers/cursor.provider";
+import { Suspense } from "react";
+import Loader from "./loader.page";
 export const metadata: Metadata = {
 	title: "Studio Carmesim",
 	description:
@@ -56,7 +58,11 @@ export default function RootLayout({
 				/>
 				<Header />
 				<Provider>
-					<CursorProvider>{children}</CursorProvider>
+					<CursorProvider>
+						<Suspense fallback={<Loader/>}>
+							{children}
+						</Suspense>
+					</CursorProvider>
 				</Provider>
 				<Footer />
 			</body>

@@ -15,6 +15,7 @@ import { useCursor } from "@/providers/cursor.provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Github } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -62,8 +63,9 @@ export default function Login() {
 			if (response.sucess) {
 				setLoading(false);
 				toast.success("Login realizado com sucesso");
-				route.push("/auth/dashboard");
+				route.push("/dashboard");
 			} else {
+				console.log(response)
 				setLoading(false);
 				toast.error(response.message);
 			}
@@ -165,9 +167,9 @@ export default function Login() {
 							}}
 						/>
 						<div className="w-full flex justify-center items-center text-blue-500 font-bold underline text-sm">
-							<a href="#" className="text-nowrap capitalize">
+							<Link href="/criar-login" className="text-nowrap capitalize">
 								criar login
-							</a>
+							</Link>
 							&nbsp;&nbsp;/&nbsp;&nbsp;
 							<a href="#" className="text-nowrap capitalize">
 								esqueci a senha

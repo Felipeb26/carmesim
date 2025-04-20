@@ -3,10 +3,12 @@
 import { exitLogin } from "@/actions/login.request";
 import {
 	Sheet,
+	SheetClose,
 	SheetContent,
+	SheetDescription,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger,
+	SheetTrigger
 } from "@/components/ui/sheet";
 import { retrieveCookie } from "@/utils/cookie";
 import {
@@ -18,54 +20,62 @@ import {
 	LogOutIcon,
 	MenuIcon,
 	UsersRoundIcon,
+	X,
 } from "lucide-react";
-import Link from "next/link";
+import { ActiveLink, ActiveListLink } from "./ActiveLink";
 
 export default async function Header() {
 	const cookie = await retrieveCookie("token");
 
+	async function openChange(value: boolean) {
+		"use server"
+		console.log(value)
+		return value
+	}
+
 	return (
-		<header className="h-25 w-full bg-black text-white items-center flex flex-nowrap capitalize font-semibold tracking-wide">
+		<header className="h-25 bg-black text-white w-full items-center flex flex-nowrap capitalize font-semibold tracking-wide px-10">
+
 			<nav className="w-full flex-row items-center justify-around px-6 hidden sm:flex">
 				<h2 className="link">
-					<Link
+					<ActiveLink
 						href={"/galeria"}
 						className="active:text-[var(--color950)] focus:text-[var(--color950)]"
 					>
 						galeria
-					</Link>
+					</ActiveLink>
 				</h2>
 				<h2 className="link">
-					<Link
+					<ActiveLink
 						href={"/artistas"}
 						className="active:text-[var(--color950)] focus:text-[var(--color950)]"
 					>
 						artistas
-					</Link>
+					</ActiveLink>
 				</h2>
 				<h1 className="link uppercase tracking-wider text-lg font-bold">
-					<Link
+					<ActiveLink
 						href="/"
 						className="active:text-[var(--color950)] focus:text-[var(--color950)]"
 					>
 						carmesim
-					</Link>
+					</ActiveLink>
 				</h1>
 				<h2 className="link">
-					<Link
+					<ActiveLink
 						href={"/eventos"}
 						className="active:text-[var(--color950)] focus:text-[var(--color950)]"
 					>
 						eventos
-					</Link>
+					</ActiveLink>
 				</h2>
 				<h2 className="link">
-					<Link
+					<ActiveLink
 						href="/contatos"
 						className="active:text-[var(--color950)] focus:text-[var(--color950)]"
 					>
 						contatos
-					</Link>
+					</ActiveLink>
 				</h2>
 				{cookie && (
 					<Sheet>
@@ -74,104 +84,116 @@ export default async function Header() {
 						</SheetTrigger>
 						<SheetContent
 							side="right"
-							className="bg-gray-800 py-15 px-8 capitalize font-bold tracking-wider text-lg text-white"
+							className="bg-black py-15 px-8 capitalize font-bold tracking-wider text-lg text-white"
 						>
-							<h2 className="link flex items-center gap-4">
-								<ChartGantt />
-								<Link href={"/auth/dashboard"}>dashboard</Link>
-							</h2>
-							<h2
-								className="link flex items-center gap-4"
-								onClick={exitLogin}
-							>
-								<LogOutIcon />
-								<Link href="">logout</Link>
-							</h2>
+							<SheetHeader>
+								<SheetClose asChild>
+									<button className="absolute right-4 top-4 text-red-500 hover:text-red-700 border-2 rounded-sm p-0.5">
+										<X />
+									</button>
+								</SheetClose>
+								<SheetTitle className="text-center text-white tracking-wide text-lg">
+									Carmesim
+								</SheetTitle>
+								<SheetDescription />
+							</SheetHeader>
+							<ul className="px-4 capitalize text-accent text-[1.2rem] font-bold flex flex-col gap-3">
+
+								<ActiveListLink
+									icon={<ChartGantt />}
+									href={"/dashboard"}>
+									dashboard
+								</ActiveListLink>
+								<ActiveListLink
+									onClick={exitLogin}
+									icon={<LogOutIcon />}
+									href="">
+									logout
+								</ActiveListLink>
+							</ul>
 						</SheetContent>
 					</Sheet>
 				)}
 			</nav>
 
-			<nav className="sm:hidden flex w-full gap-10 px-10">
-				<Sheet>
+			{/* Mobile View */}
+			<nav className="sm:hidden flex w-full gap-10 ">
+				<Sheet onOpenChange={openChange}>
 					<SheetTrigger asChild>
 						<MenuIcon className="cursor-pointer" size={40} />
 					</SheetTrigger>
-					<SheetContent side="left" className="bg-gray-600">
+					<SheetContent side="left" className="bg-black opacity-75 max-w-[300px]">
+						<SheetClose asChild>
+							<button className="absolute right-4 top-4 text-red-500 hover:text-red-700 border-2 rounded-sm p-0.5">
+								<X />
+							</button>
+						</SheetClose>
 						<SheetHeader>
 							<SheetTitle className="text-center text-white tracking-wide text-lg">
 								Carmesim
 							</SheetTitle>
+							<SheetDescription />
 						</SheetHeader>
-						<ul className="px-4 capitalize text-accent text-lg font-bold flex flex-col">
-							<li className="link flex flex-nowrap items-center gap-5 my-2">
-								<HomeIcon />
-								<Link
-									href="/"
-									className="active:text-[var(--color950)] focus:text-[var(--color950)]"
-								>
-									carmesim
-								</Link>
-							</li>
-							<li className="link flex flex-nowrap items-center gap-5 my-2">
-								<BookIcon />
-								<Link
-									href={"/galeria"}
-									className="active:text-[var(--color950)] focus:text-[var(--color950)]"
-								>
-									galeria
-								</Link>
-							</li>
-							<li className="link flex flex-nowrap items-center gap-5 my-2">
-								<UsersRoundIcon />
-								<Link
-									href={"/artistas"}
-									className="active:text-[var(--color950)] focus:text-[var(--color950)]"
-								>
-									artistas
-								</Link>
-							</li>
-							<li className="link flex flex-nowrap items-center gap-5 my-2">
-								<CalendarFold />
-								<Link
-									href={"/eventos"}
-									className="active:text-[var(--color950)] focus:text-[var(--color950)]"
-								>
-									eventos
-								</Link>
-							</li>
-							<li className="link flex flex-nowrap items-center gap-5 my-2">
-								<Contact2Icon />
-								<Link
-									href="/contatos"
-									className="active:text-[var(--color950)] focus:text-[var(--color950)]"
-								>
-									contatos
-								</Link>
-							</li>
+						<ul className="px-4 capitalize text-accent text-[1.2rem] font-bold flex flex-col gap-3">
+							<ActiveListLink
+								icon={<HomeIcon />}
+								href={"/"}
+								className="active:text-[var(--color950)] focus:text-[var(--color950)]">
+								carmesim
+							</ActiveListLink>
+
+							<ActiveListLink
+								icon={<BookIcon />}
+								href={"/galeria"}
+								className="active:text-[var(--color950)] focus:text-[var(--color950)]"
+							>
+								galeria
+							</ActiveListLink>
+							<ActiveListLink
+								icon={<UsersRoundIcon />}
+								href={"/artistas"}
+								className="active:text-[var(--color950)] focus:text-[var(--color950)]"
+							>
+								artistas
+							</ActiveListLink>
+							<ActiveListLink
+								icon={<CalendarFold />}
+								href={"/eventos"}
+								className="active:text-[var(--color950)] focus:text-[var(--color950)]"
+							>
+								eventos
+							</ActiveListLink>
+							<ActiveListLink
+								icon={<Contact2Icon />}
+								href="/contatos"
+								className="active:text-[var(--color950)] focus:text-[var(--color950)]"
+							>
+								contatos
+							</ActiveListLink>
 							{cookie && (
-								<li className="link flex flex-nowrap items-center gap-5 my-2">
-									<ChartGantt />
-									<Link href={"/auth/dashboard"}>
-										dashboard
-									</Link>
-								</li>
+								<ActiveListLink
+									icon={<ChartGantt />}
+									href={"/dashboard"}>
+									dashboard
+								</ActiveListLink>
 							)}
 							{cookie && (
-								<li>
-									<LogOutIcon />
-								</li>
+								<ActiveListLink
+									icon={<LogOutIcon />}
+									href={"/auth"}>
+									logout
+								</ActiveListLink>
 							)}
 						</ul>
 					</SheetContent>
 				</Sheet>
 				<h1 className="link tracking-wider text-2xl font-bold capitalize text-center w-full">
-					<Link
+					<ActiveLink
 						href="/"
-						className="active:text-[var(--color950)] focus:text-[var(--color950)]"
+						className="active:text-[var(--color950)] focus:text-[var(--color950)] h-full"
 					>
 						carmesim
-					</Link>
+					</ActiveLink>
 				</h1>
 			</nav>
 		</header>

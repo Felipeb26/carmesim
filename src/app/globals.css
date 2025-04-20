@@ -4,7 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --color950: #b10505;
+  /* --color950: #b10505;
+  --background_color: #000000d9; */
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.147 0.004 49.25);
@@ -79,6 +80,10 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+body{
+  transition: all 200ms ease-in-out;
+}
+
 a {
   letter-spacing: 0.1rem;
   text-decoration: none;
@@ -101,6 +106,10 @@ a {
   bottom: -0.3rem;
   transition: all 0.5s ease-in-out;
   transform: scale(0, 0.8);
+}
+
+.link a:active{
+  color: #b10505;
 }
 
 .link a:hover {

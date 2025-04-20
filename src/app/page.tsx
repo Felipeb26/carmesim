@@ -1,34 +1,38 @@
+import Instagram from "@/components/shared/icons/Instagram";
+import WhatsApp from "@/components/shared/icons/Whatsapp";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
 	return (
-		<div>
-			<main className="flex flex-col h-[calc(70dvh_-_var(--spacing)_*_25)]">
+		<>
+			<main className="flex flex-col h-[calc(80lvh_-_var(--spacing)_*_25)]">
 				<div className="flex flex-col lg:flex-row flex-1">
-					<div className="flex-[0.1] lg:max-w-[3rem] flex flex-wrap content-center justify-center bg-red-800 w-full">
-						<p className="lg:rotate-90 w-full uppercase font-bold text-nowrap text-center">
+					<div className="flex-[0.1] lg:max-w-[3rem] flex items-center justify-center bg-red-800 w-full">
+						<p className="lg:rotate-90 w-full uppercase font-bold whitespace-nowrap text-center flex flex-nowrap justify-center gap-5 text-white">
 							<Link
-								className="text-blue-400 hover:text-blue-200 underline font-semibold transition"
+								className="text-blue-300 hover:text-blue-400 underline font-semibold transition flex items-center gap-2"
 								href="https://www.instagram.com/"
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								@rede social
+								<Instagram />
+								@instagram
 							</Link>
 							&nbsp;/&nbsp;
 							<Link
-								className="text-green-500 hover:text-green-300 underline font-semibold transitiontext-green-500"
+								className="text-green-300 hover:text-green-400 underline font-semibold transition flex items-center gap-2"
 								href="https://wa.me/+5511971404157?text=Olá%20meu%20nome%20é%20fulano%20gostaria%20de%20questionar%20sobre%20os%20cursos"
 								target="_blank"
 								rel="noopener noreferrer"
 							>
+								<WhatsApp />
 								@whatsapp
 							</Link>
 						</p>
 					</div>
-					<div className="flex-1 bg-black opacity-85 py-8 lg:py-0 lg:content-center px-4 text-white">
-						<h1 className="capitalize font-bold text-2xl mb-5">
+					<div className="flex-1 bg-black opacity-85 pt-8 pb-2 lg:py-0 lg:content-center px-4 text-white">
+						<h1 className="capitalize font-bold text-2xl mb-2">
 							Studio Carmesim
 						</h1>
 						<p>
@@ -48,9 +52,10 @@ export default function Home() {
 							arte.
 						</p>
 					</div>
-					<div className="flex-1 bg-black opacity-85 justify-center hidden lg:flex xls:flex">
+					<div className="flex-1 bg-[#000000d9] justify-center flex xls:flex p-5">
 						<Image
-							src="globe.svg"
+							className="w-full aspect-auto max-h-[710px] shadow [filter:drop-shadow(0_0_0.5rem_black)]"
+							src="/images/tato.webp"
 							alt="imagem"
 							width="240"
 							height="240"
@@ -101,6 +106,6 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
-		</div>
+		</>
 	);
 }

@@ -12,7 +12,7 @@ export async function loginUser({
 	senha: string;
 }) {
 	const user: IUser = { username: username, email: email, senha: senha }
-	const response = await fetchApi<IToken, IUser>("auth", "POST", user)
+	const response = await fetchApi<IToken, IUser>("auth/create", "POST", user)
 
 	return response
 }

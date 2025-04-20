@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Carmesim | Contatos",
+	title: "Studio Carmesim | Contatos",
 };
 
 export default function Galeria() {
