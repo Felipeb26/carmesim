@@ -1,16 +1,18 @@
 import { jwtDecode } from "jwt-decode";
 import { NextRequest, NextResponse } from "next/server";
+import { deleteCookie } from "./utils/cookie";
 
 type PublicRoute = { path: string; whenAuthenticated: "next" | "redirect" };
 
 const publicRoutes: PublicRoute[] = [
   { path: "/", whenAuthenticated: "next" },
-  { path: "/artistas", whenAuthenticated: "next" },
-  { path: "/eventos", whenAuthenticated: "next" },
-  { path: "/galeria", whenAuthenticated: "next" },
-  { path: "/contatos", whenAuthenticated: "next" },
-  { path: "/auth/login", whenAuthenticated: "redirect" },
-  { path: "/criar-login", whenAuthenticated: "redirect" },
+  { path: "/artistas/", whenAuthenticated: "next" },
+  { path: "/eventos/", whenAuthenticated: "next" },
+  { path: "/galeria/", whenAuthenticated: "next" },
+  { path: "/contatos/", whenAuthenticated: "next" },
+  { path: "/auth/", whenAuthenticated: "redirect" },
+  { path: "/auth/login/", whenAuthenticated: "redirect" },
+  { path: "/criar-login/", whenAuthenticated: "redirect" },
 ] as const;
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED = "/auth/login";
@@ -19,6 +21,12 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const publicRoute = publicRoutes.find((route) => route.path === path);
   const token = request.cookies.get("token")?.value;
+
+  if (!token && path === "/auth/") {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/auth/login";
+    return NextResponse.redirect(redirectUrl);
+  }
 
   if (!token && publicRoute) {
     return NextResponse.next();
@@ -30,30 +38,30 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (token && publicRoute && publicRoute.whenAuthenticated === "redirect") {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/";
-    return NextResponse.redirect(redirectUrl);
-  }
-
-  if (!token && request.nextUrl.pathname.startsWith("/auth")) {
-    return NextResponse.rewrite(new URL("/auth/login", request.url));
-  }
-
-  if (token && !publicRoute) {
+  if (token) {
     try {
       const decoded = jwtDecode<{ exp: number }>(token);
       const currentTimestamp = Math.floor(Date.now() / 1000);
 
       if (decoded.exp && decoded.exp < currentTimestamp) {
-        const redirectUrl = request.nextUrl.clone();
-        redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
-        return NextResponse.redirect(redirectUrl);
+        deleteCookie("token").then(() => {
+          const redirectUrl = request.nextUrl.clone();
+          redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
+          return NextResponse.redirect(redirectUrl);
+        })
       }
-    } catch (error: unknown) {
-      console.log(error);
+    } catch (error) {
+      console.error("Erro ao decodificar token:", error);
       const redirectUrl = request.nextUrl.clone();
       redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
+      return NextResponse.redirect(redirectUrl);
+    }
+  }
+
+  if (token && publicRoute && publicRoute.whenAuthenticated === "redirect") {
+    if (path !== "/dashboard/") {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/dashboard/";
       return NextResponse.redirect(redirectUrl);
     }
   }
@@ -70,6 +78,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|images).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|images|.*.svg).*)",
   ],
 };

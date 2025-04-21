@@ -1,6 +1,5 @@
 "use server";
 
-import { exitLogin } from "@/actions/login.request";
 import {
 	Sheet,
 	SheetClose,
@@ -17,25 +16,20 @@ import {
 	ChartGantt,
 	Contact2Icon,
 	HomeIcon,
-	LogOutIcon,
 	MenuIcon,
 	UsersRoundIcon,
-	X,
+	X
 } from "lucide-react";
 import { ActiveLink, ActiveListLink } from "./ActiveLink";
+import { ChangeTheme } from "./ThemeButton";
+import { LogoutButton } from "./logout.btn";
 
 export default async function Header() {
 	const cookie = await retrieveCookie("token");
 
-	async function openChange(value: boolean) {
-		"use server"
-		console.log(value)
-		return value
-	}
-
 	return (
 		<header className="h-25 bg-black text-white w-full items-center flex flex-nowrap capitalize font-semibold tracking-wide px-10">
-
+			<ChangeTheme className="hidden sm:block" />
 			<nav className="w-full flex-row items-center justify-around px-6 hidden sm:flex">
 				<h2 className="link">
 					<ActiveLink
@@ -88,7 +82,7 @@ export default async function Header() {
 						>
 							<SheetHeader>
 								<SheetClose asChild>
-									<button className="absolute right-4 top-4 text-red-500 hover:text-red-700 border-2 rounded-sm p-0.5">
+									<button className="absolute right-4 top-4 text-red-500 hover:text-red-700 border-2 rounded-sm p-0.5" id="close-btn">
 										<X />
 									</button>
 								</SheetClose>
@@ -104,12 +98,9 @@ export default async function Header() {
 									href={"/dashboard"}>
 									dashboard
 								</ActiveListLink>
-								<ActiveListLink
-									onClick={exitLogin}
-									icon={<LogOutIcon />}
-									href="">
-									logout
-								</ActiveListLink>
+								<li className="link flex flex-nowrap items-center gap-5 my-2 py-2 w-full">
+									<LogoutButton />
+								</li>
 							</ul>
 						</SheetContent>
 					</Sheet>
@@ -118,13 +109,13 @@ export default async function Header() {
 
 			{/* Mobile View */}
 			<nav className="sm:hidden flex w-full gap-10 ">
-				<Sheet onOpenChange={openChange}>
+				<Sheet>
 					<SheetTrigger asChild>
 						<MenuIcon className="cursor-pointer" size={40} />
 					</SheetTrigger>
 					<SheetContent side="left" className="bg-black opacity-75 max-w-[300px]">
 						<SheetClose asChild>
-							<button className="absolute right-4 top-4 text-red-500 hover:text-red-700 border-2 rounded-sm p-0.5">
+							<button className="absolute right-4 top-4 text-red-500 hover:text-red-700 border-2 rounded-sm p-0.5" id="close-btn">
 								<X />
 							</button>
 						</SheetClose>
@@ -178,12 +169,11 @@ export default async function Header() {
 								</ActiveListLink>
 							)}
 							{cookie && (
-								<ActiveListLink
-									icon={<LogOutIcon />}
-									href={"/auth"}>
-									logout
-								</ActiveListLink>
+								<li className="link flex flex-nowrap items-center gap-5 my-2 py-2 w-full">
+									<LogoutButton />
+								</li>
 							)}
+							<ChangeTheme className="" />
 						</ul>
 					</SheetContent>
 				</Sheet>

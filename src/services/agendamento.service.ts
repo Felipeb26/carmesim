@@ -15,7 +15,6 @@ export async function findAllAgendamentos({ page, size }: { page: number, size: 
     const response = await fetchApi<IPagination<IAgendamento>>(`agendamento/paginate?page=${page}&size=${size}`, "GET", null, authorization)
 
     if ("status" in response && (response.status === 401 || response.status === 403)) {
-        console.error("Token inválido ou expirado:", response);
         deleteCookie("token")
         return { status: 401, message: "unathorized" } as IException
     }

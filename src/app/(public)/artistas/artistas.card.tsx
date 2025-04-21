@@ -11,8 +11,6 @@ import { toast } from "sonner"
 
 export default function ArtistaCard({ artistas }: { artistas: IException | IPagination<IFuncionario> }) {
 
-    console.log(artistas)
-
     if ("status" in artistas) {
         toast.error(artistas.message)
         return <>

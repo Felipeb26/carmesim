@@ -58,7 +58,7 @@ export async function authenticateAction(formData: FormData) {
 	}
 }
 
-export async function exitLogin(){
+export async function exitLogin() {
 	await deleteCookie("token")
-	.then(() => redirect("/"))
+	redirect("/")
 }

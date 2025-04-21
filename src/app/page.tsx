@@ -1,12 +1,14 @@
+import { changeTheme } from "@/components/shared/header/ThemeButton";
 import Instagram from "@/components/shared/icons/Instagram";
 import WhatsApp from "@/components/shared/icons/Whatsapp";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
+	
 	return (
 		<>
-			<main className="flex flex-col h-[calc(80lvh_-_var(--spacing)_*_25)]">
+			<main className="flex flex-col h-[calc(80lvh_-_var(--spacing)_*_25)]" onLoad={changeTheme}>
 				<div className="flex flex-col lg:flex-row flex-1">
 					<div className="flex-[0.1] lg:max-w-[3rem] flex items-center justify-center bg-red-800 w-full">
 						<p className="lg:rotate-90 w-full uppercase font-bold whitespace-nowrap text-center flex flex-nowrap justify-center gap-5 text-white">
@@ -53,13 +55,13 @@ export default function Home() {
 						</p>
 					</div>
 					<div className="flex-1 bg-[#000000d9] justify-center flex xls:flex p-5">
-						<Image
-							className="w-full aspect-auto max-h-[710px] shadow [filter:drop-shadow(0_0_0.5rem_black)]"
+						{/* <Image
+							className="w-full aspect-auto min-h[200px] lg:max-h-[710px] shadow [filter:drop-shadow(0_0_0.5rem_black)]"
 							src="/images/tato.webp"
 							alt="imagem"
 							width="240"
 							height="240"
-						/>
+						/> */}
 					</div>
 				</div>
 			</main>

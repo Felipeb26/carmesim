@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import Loader from "@/app/loader.page";
 
 const CursorContext = createContext({
-	setLoading: (loading: boolean) => {},
+	setLoading: (loading: boolean) => { },
 });
 
 export function CursorProvider({ children }: { children: React.ReactNode }) {
@@ -14,11 +14,18 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
 		document.body.style.cursor = loading ? "wait" : "default";
 	}, [loading]);
 
+	const resetTheme = () => {
+		const body = document.body;
+		body.classList.add("light")
+	}
+
 	return (
-		<CursorContext.Provider value={{ setLoading }}>
-			{loading && <Loader />}
-            {!loading && children}
-		</CursorContext.Provider>
+		<>
+			<CursorContext.Provider value={{ setLoading }} >
+				{loading && <Loader />}
+				{!loading && children}
+			</CursorContext.Provider>
+		</>
 	);
 }
 

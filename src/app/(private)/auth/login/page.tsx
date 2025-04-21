@@ -62,10 +62,9 @@ export default function Login() {
 
 			if (response.sucess) {
 				setLoading(false);
+				route.push("/dashboard/");
 				toast.success("Login realizado com sucesso");
-				route.push("/dashboard");
 			} else {
-				console.log(response)
 				setLoading(false);
 				toast.error(response.message);
 			}
@@ -74,11 +73,11 @@ export default function Login() {
 
 	return (
 		<>
-			<div className="h-[calc(90.6dvh_-_var(--spacing)_*_25)] bg w-full flex justify-center py-20 lg:py-30">
+			<div className="h-[calc(90.6dformvh_-_var(--spacing)_*_25)] bg w-full flex justify-center py-20 lg:py-30">
 				<Form {...form}>
 					<form
 						className="shadow-[0_0_0.5rem_black] rounded-2xl p-8 px-15 flex flex-col gap-6 w-1/3 min-w-[350px] h-fit"
-						onSubmit={form.handleSubmit(submitForm)}
+						onSubmit={form.handleSubmit(submitForm)} autoComplete="on"
 					>
 						<h1 className="mb-10 text-2xl font-bold underline text-center">
 							Realizar Login {isPending}
