@@ -2,7 +2,7 @@
 
 import { loginUser } from "@/services/auth.service";
 import { IException } from "@/types/IException";
-import { deleteCookie, saveCookie } from "@/utils/cookie";
+import { deleteCookie, saveCookie } from "@/actions/cookie.action";
 import { getErrorMessage } from "@/utils/error_message";
 import { redirect } from "next/navigation";
 

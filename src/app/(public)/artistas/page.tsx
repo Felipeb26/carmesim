@@ -5,13 +5,11 @@ import ArtistaCard from "./artistas.card";
 
 export default async function Artistas() {
 
-    const funcionarios = await getFuncionariosAction({ page: 0, size: 10 })
+	const funcionarios = await getFuncionariosAction({ page: 0, size: 10 })
 
-    return (
-        <>
-            <main className="flex flex-row flex-wrap justify-center sm:justify-normal h-[calc(85lvh_-_var(--spacing)_*_25)] bg-[#000000d6] py-15 px-4 sm:px-10 gap-4">
-                {funcionarios && <ArtistaCard artistas={funcionarios} />}
-            </main>
-        </>
-    );
+	return (
+		<main className="flex flex-1 flex-row flex-wrap justify-center sm:justify-normal bg-[#000000d6] py-15 px-1 sm:px-10 gap-4">
+			{funcionarios && <ArtistaCard artistas={funcionarios} />}
+		</main>
+	);
 }

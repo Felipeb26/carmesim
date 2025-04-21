@@ -9,7 +9,7 @@ import {
 	SheetTitle,
 	SheetTrigger
 } from "@/components/ui/sheet";
-import { retrieveCookie } from "@/utils/cookie";
+import { retrieveCookie } from "@/actions/cookie.action";
 import {
 	BookIcon,
 	CalendarFold,

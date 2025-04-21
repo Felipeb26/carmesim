@@ -3,58 +3,58 @@ import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface ThemeProps {
-    className?: string;
+	className?: string;
 }
 
 export function ChangeTheme({ className }: ThemeProps) {
-    const [lightTheme, setLightTheme] = useState(true);
+	const [lightTheme, setLightTheme] = useState(true);
 
-    useEffect(() => {
-        const theme = sessionStorage.getItem("theme");
-        if (theme === "dark") {
-            setLightTheme(false);
-        } else {
-            setLightTheme(true);
-        }
-    }, [])
+	useEffect(() => {
+		const theme = sessionStorage.getItem("theme");
+		if (theme === "dark") {
+			setLightTheme(false);
+		} else {
+			setLightTheme(true);
+		}
+	}, [])
 
 
-    async function changeTheme() {
-        const body = document.body;
-        const theme = sessionStorage.getItem("theme");
+	async function changeTheme() {
+		const body = document.body;
+		const theme = sessionStorage.getItem("theme");
 
-        if (theme === "dark") {
-            sessionStorage.setItem("theme", "light");
-            body.classList.remove("dark");
-            body.classList.add("light");
-            setLightTheme(true);
-        } else {
-            sessionStorage.setItem("theme", "dark");
-            body.classList.remove("light");
-            body.classList.add("dark");
-            setLightTheme(false);
-        }
-    }
+		if (theme === "dark") {
+			sessionStorage.setItem("theme", "light");
+			body.classList.remove("dark");
+			body.classList.add("light");
+			setLightTheme(true);
+		} else {
+			sessionStorage.setItem("theme", "dark");
+			body.classList.remove("light");
+			body.classList.add("dark");
+			setLightTheme(false);
+		}
+	}
 
-    return (
-        <button type="button" onClick={changeTheme} className={className} aria-label="mudar tema">
-            {lightTheme ? <Moon /> : <Sun />}
-            Mudar tema
-        </button>
-    );
+	return (
+		<button type="button" onClick={changeTheme} className={className} aria-label="mudar tema">
+			{lightTheme ? <Moon /> : <Sun />}
+			Mudar tema
+		</button>
+	);
 }
 
 export function changeTheme() {
-    const body = document.body;
-    const theme = sessionStorage.getItem("theme");
+	const body = document.body;
+	const theme = sessionStorage.getItem("theme");
 
-    if (theme === "dark") {
-        sessionStorage.setItem("theme", "light");
-        body.classList.remove("dark");
-        body.classList.add("light");
-    } else {
-        sessionStorage.setItem("theme", "dark");
-        body.classList.remove("light");
-        body.classList.add("dark");
-    }
+	if (theme === "dark") {
+		sessionStorage.setItem("theme", "light");
+		body.classList.remove("dark");
+		body.classList.add("light");
+	} else if (theme === "light") {
+		sessionStorage.setItem("theme", "dark");
+		body.classList.remove("light");
+		body.classList.add("dark");
+	}
 }

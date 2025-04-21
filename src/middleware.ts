@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { NextRequest, NextResponse } from "next/server";
-import { deleteCookie } from "./utils/cookie";
+import { deleteCookie } from "./actions/cookie.action";
 
 type PublicRoute = { path: string; whenAuthenticated: "next" | "redirect" };
 
@@ -13,6 +13,8 @@ const publicRoutes: PublicRoute[] = [
   { path: "/auth/", whenAuthenticated: "redirect" },
   { path: "/auth/login/", whenAuthenticated: "redirect" },
   { path: "/criar-login/", whenAuthenticated: "redirect" },
+  { path: "/politicas/cookies", whenAuthenticated: "next" },
+  { path: "/politicas/privacidade", whenAuthenticated: "next" },
 ] as const;
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED = "/auth/login";
@@ -48,7 +50,7 @@ export function middleware(request: NextRequest) {
           const redirectUrl = request.nextUrl.clone();
           redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
           return NextResponse.redirect(redirectUrl);
-        })
+        });
       }
     } catch (error) {
       console.error("Erro ao decodificar token:", error);

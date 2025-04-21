@@ -2,7 +2,7 @@ import { fetchApi } from "@/lib/api";
 import { ICliente } from "@/types/ICliente";
 import { IException } from "@/types/IException";
 import { IPagination } from "@/types/IPgaination";
-import { deleteCookie, retrieveCookie } from "@/utils/cookie";
+import { deleteCookie, retrieveCookie } from "@/actions/cookie.action";
 
 export async function findAllClients({ page, size }: { page: number, size: number }) {
     const token = await retrieveCookie("token")

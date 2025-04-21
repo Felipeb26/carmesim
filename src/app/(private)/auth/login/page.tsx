@@ -51,6 +51,20 @@ export default function Login() {
 	const route = useRouter();
 
 	const submitForm: SubmitHandler<FieldValues> = (data) => {
+		const consent = localStorage.getItem('cookieConsent');
+
+		if (consent !== 'false') {
+			toast.error('Você precisa aceitar os cookies para fazer login.', {
+				action: {
+					label: 'Aceitar Cookies',
+					onClick: () => {
+						localStorage.setItem('cookieConsent', 'true');
+						toast.success('Cookies aceitos! Agora tente fazer login novamente.');
+					}
+				}
+			}); return;
+		}
+
 		setLoading(true);
 		startTransition(async () => {
 			const form = new FormData();

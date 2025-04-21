@@ -2,7 +2,7 @@ import { fetchApi } from "@/lib/api";
 import { IException } from "@/types/IException";
 import { IFuncionario } from "@/types/IFuncionario";
 import { IPagination } from "@/types/IPgaination";
-import { deleteCookie, retrieveCookie } from "@/utils/cookie";
+import { deleteCookie, retrieveCookie } from "@/actions/cookie.action";
 
 interface APiPage {
   page: number;

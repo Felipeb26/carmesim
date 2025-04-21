@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { IException } from "@/types/IException"
@@ -8,10 +8,10 @@ import { formatPhoneNumber } from "@/utils/format"
 import { toast } from "sonner"
 
 
-
 export default function ArtistaCard({ artistas }: { artistas: IException | IPagination<IFuncionario> }) {
 
     if ("status" in artistas) {
+			console.log(artistas.message)
         toast.error(artistas.message)
         return <>
             <h3>
@@ -22,7 +22,7 @@ export default function ArtistaCard({ artistas }: { artistas: IException | IPagi
 
     return <>
         {artistas.data.map((func, index) => {
-            return <>
+            return (
                 <Card key={index} className="min-w-[280px] max-w-[450px] flex flex-col px-8 h-fit">
                     <CardTitle>
                         {func.bio}
@@ -47,7 +47,7 @@ export default function ArtistaCard({ artistas }: { artistas: IException | IPagi
                         </p>
                     </CardContent>
                 </Card>
-            </>
+						)
         })}
     </>
 }

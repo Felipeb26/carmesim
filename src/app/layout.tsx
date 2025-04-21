@@ -10,6 +10,7 @@ import "./globals.css";
 import { CursorProvider } from "@/providers/cursor.provider";
 import { Suspense } from "react";
 import Loader from "./loader.page";
+import CookieConsent from "@/components/shared/consent/coockie.consent";
 export const metadata: Metadata = {
 	title: "Studio Carmesim",
 	description:
@@ -48,7 +49,7 @@ export default function RootLayout({
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<body className={cn(`font-sans antialiased`, inter.className)}>
+			<body className={cn(`font-sans antialiased min-h-screen flex flex-col`, inter.className)}>
 				<Toaster
 					position="top-right"
 					closeButton
@@ -60,11 +61,14 @@ export default function RootLayout({
 				<Header />
 				<Provider>
 					<CursorProvider>
-						<Suspense fallback={<Loader/>}>
-							{children}
+						<Suspense fallback={<Loader />}>
+							<main className="flex-1 flex flex-col flex-nowrap">
+								{children}
+							</main>
 						</Suspense>
 					</CursorProvider>
 				</Provider>
+				<CookieConsent/>
 				<Footer />
 			</body>
 		</html>
