@@ -16,7 +16,7 @@ export async function fetchApi<T, D = unknown>(
 	const controller = new AbortController();
 	const id = setTimeout(() => controller.abort(), timeout || 40000);
 
-const isForceCache = customHeaders?.["cache"] === "force-cache";
+	const isForceCache = customHeaders?.["cache"] === "force-cache";
 
 	const options: RequestInit = {
 		method,

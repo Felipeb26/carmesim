@@ -1,6 +1,7 @@
 "use client";
 
-import { loginAction } from "@/actions/login.request";
+import { retrieveCookie, saveCookie } from "@/actions/cookie.action";
+import { authenticateAction } from "@/actions/login.request";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -50,20 +51,22 @@ export default function Login() {
 	const [isPending, startTransition] = useTransition();
 	const route = useRouter();
 
-	const submitForm: SubmitHandler<FieldValues> = (data) => {
-		const consent = localStorage.getItem('cookieConsent');
+	const submitForm: SubmitHandler<FieldValues> = async (data) => {
+		const consent = await retrieveCookie('cookieConsent');
 
-		if (consent !== 'false') {
+		if (consent !== 'true') {
 			toast.error('Você precisa aceitar os cookies para fazer login.', {
 				action: {
 					label: 'Aceitar Cookies',
-					onClick: () => {
-						localStorage.setItem('cookieConsent', 'true');
+					onClick: async () => {
+						await saveCookie({ id: 'cookieConsent', to_guard: 'true' });
 						toast.success('Cookies aceitos! Agora tente fazer login novamente.');
 					}
 				}
-			}); return;
+			});
+			return;
 		}
+
 
 		setLoading(true);
 		startTransition(async () => {
@@ -72,7 +75,7 @@ export default function Login() {
 			form.append("email", data.email);
 			form.append("senha", data.senha);
 
-			const response = await loginAction(form);
+			const response = await authenticateAction(form);
 
 			if (response.sucess) {
 				setLoading(false);

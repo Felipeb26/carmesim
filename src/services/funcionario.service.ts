@@ -13,15 +13,16 @@ interface APiPage {
 export async function findAllWorkers({ page, size, customHeaders }: APiPage) {
 
     const token = await retrieveCookie("token")
-    if (!token) {
-        return { status: 401, message: "unathorized" } as IException
-    }
-    let authorization: Record<string, string> = { "authorization": `Bearer ${token}` }
+    let headers: Record<string, string> = { ...customHeaders };
 
-    if(customHeaders){
-        authorization = { ...customHeaders, ...authorization};
-    }
-    const response = await fetchApi<IPagination<IFuncionario>>(`funcionario/paginate?page=${page}&size=${size}`, "GET", null, authorization)
+		if (token) {
+			headers = {
+				...headers,
+				authorization: `Bearer ${token}`,
+			};
+		}
+
+    const response = await fetchApi<IPagination<IFuncionario>>(`funcionario/paginate?page=${page}&size=${size}`, "GET", null, headers)
 
     if ("status" in response && (response.status == 401 || response.status == 403)) {
         deleteCookie("token")

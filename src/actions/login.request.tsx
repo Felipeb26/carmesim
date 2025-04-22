@@ -1,8 +1,8 @@
 "use server";
 
+import { deleteCookie, saveCookie } from "@/actions/cookie.action";
 import { loginUser } from "@/services/auth.service";
 import { IException } from "@/types/IException";
-import { deleteCookie, saveCookie } from "@/actions/cookie.action";
 import { getErrorMessage } from "@/utils/error_message";
 import { redirect } from "next/navigation";
 
@@ -12,7 +12,7 @@ export async function loginAction(formData: FormData) {
 		const email = formData.get("email") as string;
 		const senha = formData.get("senha") as string;
 
-		const result = await loginUser({ username, email, senha });
+		const result = await loginUser({ authenticate: false, username, email, senha });
 
 		if ("message" in result) {
 			return { sucess: false, message: result.message };
@@ -28,6 +28,7 @@ export async function loginAction(formData: FormData) {
 			return { sucess: false, message: except.message };
 		}
 	} catch (err: unknown) {
+		console.log("linha31", err)
 		return { sucess: false, message: getErrorMessage(err) };
 	}
 }
@@ -38,8 +39,8 @@ export async function authenticateAction(formData: FormData) {
 		const email = formData.get("email") as string;
 		const senha = formData.get("senha") as string;
 
-		const result = await loginUser({ username, email, senha });
-
+		const result = await loginUser({ authenticate: true, username, email, senha });
+		
 		if ("message" in result) {
 			return { sucess: false, message: result.message };
 		}
@@ -54,6 +55,7 @@ export async function authenticateAction(formData: FormData) {
 			return { sucess: false, message: except.message };
 		}
 	} catch (err: unknown) {
+		console.log("linha58", err)
 		return { sucess: false, message: getErrorMessage(err) };
 	}
 }

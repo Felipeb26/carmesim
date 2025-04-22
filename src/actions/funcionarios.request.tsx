@@ -13,6 +13,7 @@ export async function getFuncionariosAction({ page = 0, size = 10 }: PageProps) 
 		const customHeaders = { cache: "force-cache", "X-API-KEY": "minha-chave-top-secreta-123" }
 		return await findAllWorkers({ page, size, customHeaders });
 	} catch (err: unknown) {
+		console.log(err)
 		return { status: 400, message: getErrorMessage(err) } as IException;
 	}
 }
