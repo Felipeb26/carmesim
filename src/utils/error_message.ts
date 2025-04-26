@@ -1,4 +1,4 @@
-import { IException } from "@/types/IException";
+import { IException } from "@/types/errors/IException";
 
 export function getErrorMessage(error: unknown): string {
     if (error instanceof Error) return error.message;

@@ -1,7 +1,7 @@
 import { fetchApi } from "@/lib/api";
 import { ICliente } from "@/types/ICliente";
-import { IException } from "@/types/IException";
-import { IPagination } from "@/types/IPgaination";
+import { IException } from "@/types/errors/IException";
+import { IPagination } from "@/types/api/IPgaination";
 import { deleteCookie, retrieveCookie } from "@/actions/cookie.action";
 
 export async function findAllClients({ page, size }: { page: number, size: number }) {

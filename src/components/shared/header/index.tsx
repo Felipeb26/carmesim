@@ -21,7 +21,6 @@ import {
 	X
 } from "lucide-react";
 import { ActiveLink, ActiveListLink } from "./ActiveLink";
-import { ChangeTheme } from "./ThemeButton";
 import { LogoutButton } from "./logout.btn";
 
 export default async function Header() {
@@ -29,7 +28,6 @@ export default async function Header() {
 
 	return (
 		<header className="h-25 bg-black text-white w-full items-center flex flex-nowrap capitalize font-semibold tracking-wide px-10">
-			<ChangeTheme className="hidden sm:block" />
 			<nav className="w-full flex-row items-center justify-around px-6 hidden sm:flex">
 				<h2 className="link">
 					<ActiveLink
@@ -50,7 +48,7 @@ export default async function Header() {
 				<h1 className="link uppercase tracking-wider text-lg font-bold">
 					<ActiveLink
 						href="/"
-						className="active:text-[var(--color950)] focus:text-[var(--color950)]"
+						className="active:text-[var(--color950)] focus:text-[var(--color950)] text-3xl font-serif uppercase"
 					>
 						carmesim
 					</ActiveLink>
@@ -86,7 +84,7 @@ export default async function Header() {
 										<X />
 									</button>
 								</SheetClose>
-								<SheetTitle className="text-center text-white tracking-wide text-lg">
+								<SheetTitle className="text-center text-white tracking-wide text-lg font-serif uppercase">
 									Carmesim
 								</SheetTitle>
 								<SheetDescription />
@@ -120,7 +118,7 @@ export default async function Header() {
 							</button>
 						</SheetClose>
 						<SheetHeader>
-							<SheetTitle className="text-center text-white tracking-wide text-lg">
+							<SheetTitle className="text-center text-white tracking-wide text-lg font-serif uppercase">
 								Carmesim
 							</SheetTitle>
 							<SheetDescription />
@@ -173,14 +171,13 @@ export default async function Header() {
 									<LogoutButton />
 								</li>
 							)}
-							<ChangeTheme className="" />
 						</ul>
 					</SheetContent>
 				</Sheet>
-				<h1 className="link tracking-wider text-2xl font-bold capitalize text-center w-full">
+				<h1 className="link tracking-wider text-3xl font-serif font-bold capitalize text-center w-full">
 					<ActiveLink
 						href="/"
-						className="active:text-[var(--color950)] focus:text-[var(--color950)] h-full"
+						className="active:text-[var(--color950)] focus:text-[var(--color950)] h-full uppercase"
 					>
 						carmesim
 					</ActiveLink>

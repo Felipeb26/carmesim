@@ -2,7 +2,7 @@
 
 import { deleteCookie, saveCookie } from "@/actions/cookie.action";
 import { loginUser } from "@/services/auth.service";
-import { IException } from "@/types/IException";
+import { IException } from "@/types/errors/IException";
 import { getErrorMessage } from "@/utils/error_message";
 import { redirect } from "next/navigation";
 
@@ -40,7 +40,7 @@ export async function authenticateAction(formData: FormData) {
 		const senha = formData.get("senha") as string;
 
 		const result = await loginUser({ authenticate: true, username, email, senha });
-		
+
 		if ("message" in result) {
 			return { sucess: false, message: result.message };
 		}

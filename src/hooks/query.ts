@@ -1,4 +1,4 @@
-import { IException } from "@/types/IException";
+import { IException } from "@/types/errors/IException";
 import { useQuery } from "@tanstack/react-query";
 
 interface CustomRequest<T> {

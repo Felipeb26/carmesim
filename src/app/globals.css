@@ -4,8 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* --color950: #b10505;
-  --background_color: #000000d9; */
+	--color950: #960018;
+	--color900: #fa002a;
+	--light-background: rgba(0, 0, 0, 0.80);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.147 0.004 49.25);
@@ -87,7 +88,6 @@ body{
 a {
   letter-spacing: 0.1rem;
   text-decoration: none;
-  text-align: center;
   line-height: 1rem;
   position: relative;
   background: transparent;

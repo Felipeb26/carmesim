@@ -1,8 +1,8 @@
 
 import { fetchApi } from "@/lib/api";
 import { IAgendamento } from "@/types/IAgendamentos";
-import { IException } from "@/types/IException";
-import { IPagination } from "@/types/IPgaination";
+import { IException } from "@/types/errors/IException";
+import { IPagination } from "@/types/api/IPgaination";
 import { deleteCookie, retrieveCookie } from "@/actions/cookie.action";
 
 export async function findAllAgendamentos({ page, size }: { page: number, size: number }) {

@@ -5,82 +5,82 @@ import { usePathname } from "next/navigation";
 import { cloneElement, ReactElement, ReactNode } from "react";
 
 interface ActiveLinkProps extends LinkProps {
-    children: ReactNode;
-    activeClassName?: string;
-    className?: string;
+	children: ReactNode;
+	activeClassName?: string;
+	className?: string;
 }
 
 interface ActiveListLinkProps extends LinkProps {
-    children: ReactNode;
-    activeClassName?: string;
-    className?: string;
-    listClassName?: string;
-    icon: ReactElement<SVGAElement>
+	children: ReactNode;
+	activeClassName?: string;
+	className?: string;
+	listClassName?: string;
+	icon: ReactElement<SVGAElement>
 }
 
 export function ActiveLink({
-    href,
-    children,
-    className,
-    activeClassName = "text-red-500",
-    ...props
+	href,
+	children,
+	className,
+	activeClassName = "text-red-500",
+	...props
 }: ActiveLinkProps) {
-    const pathname = usePathname();
-    const isActive = pathname === href;
+	const pathname = usePathname();
+	const isActive = pathname === href;
 
-    const handleClick = () => {
-        const closeButton = window.document.getElementById("close-btn")
-        if (closeButton) {
-            closeButton.click()
-        }
-    }
+	const handleClick = () => {
+		const closeButton = window.document.getElementById("close-btn")
+		if (closeButton) {
+			closeButton.click()
+		}
+	}
 
-    return (
-        <Link
-            href={href}
-            className={`${className} ${isActive ? activeClassName : ""}`}
-            onClick={handleClick}
-            {...props}
-        >
-            {children}
-        </Link>
-    );
+	return (
+		<Link
+			href={href}
+			className={`${className} ${isActive ? activeClassName : ""}`}
+			onClick={handleClick}
+			{...props}
+		>
+			{children}
+		</Link>
+	);
 }
 
 export function ActiveListLink({
-    href,
-    children,
-    className,
-    activeClassName = "text-red-500",
-    listClassName = "link flex flex-nowrap items-center gap-5 my-2 py-2 w-full",
-    icon: Icon,
-    ...props
+	href,
+	children,
+	className,
+	activeClassName = "text-red-500",
+	listClassName = "link flex flex-nowrap items-center gap-5 my-2 py-2 w-full",
+	icon: Icon,
+	...props
 }: ActiveListLinkProps) {
-    const pathname = usePathname();
-    const isActive = pathname === href || (pathname === "/" && href === "/");
+	let pathname = usePathname();
+	pathname = pathname.length > 1 ? pathname.substring(0, pathname.length - 1) : pathname
+	const isActive = pathname === href || (pathname === "/" && href === "/");
 
-    const iconColor = isActive ? activeClassName.substring(5, activeClassName.length - 4) : "white";
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const element = cloneElement(Icon, { color: iconColor } as any)
+	const iconColor = isActive ? activeClassName.substring(5, activeClassName.length - 4) : "white";
+	const element = cloneElement(Icon, { color: iconColor } as object)
 
-    const handleClick = () => {
-        const closeButton = window.document.getElementById("close-btn")
-        if (closeButton) {
-            closeButton.click()
-        }
-    }
+	const handleClick = () => {
+		const closeButton = window.document.getElementById("close-btn")
+		if (closeButton) {
+			closeButton.click()
+		}
+	}
 
-    return (
-        <li className={listClassName} >
-            {element}
-            <Link
-                href={href}
-                className={`${className} ${isActive ? activeClassName : ""}`}
-                onClick={handleClick}
-                {...props}
-            >
-                {children}
-            </Link>
-        </li>
-    );
+	return (
+		<li className={listClassName} >
+			{element}
+			<Link
+				href={href}
+				className={`${className} ${isActive ? activeClassName : ""}`}
+				onClick={handleClick}
+				{...props}
+			>
+				{children}
+			</Link>
+		</li>
+	);
 }

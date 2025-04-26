@@ -29,7 +29,7 @@ export default function CookieConsent() {
 	}, []);
 
 	const acceptCookies = async () => {
-		await saveCookie({ id: "cookieConsent", to_guard: "true" });
+		await saveCookie({ id: "cookieConsent", to_guard: "true", time: 60 * 60 * 24 * 30});
 		setOpen(false);
 	};
 
@@ -60,8 +60,6 @@ export default function CookieConsent() {
 						Aceitar
 					</Button>
 				</DialogFooter>
-
-				{/* Botão de Fechar no canto */}
 				<button
 					className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none"
 					onClick={() => setOpen(false)}

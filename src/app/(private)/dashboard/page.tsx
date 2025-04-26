@@ -23,9 +23,9 @@ import { findAllWorkers } from "@/services/funcionario.service";
 import { IAgendamento } from "@/types/IAgendamentos";
 import { ICliente } from "@/types/ICliente";
 import { IEvento } from "@/types/IEvento";
-import { IException } from "@/types/IException";
+import { IException } from "@/types/errors/IException";
 import { IFuncionario } from "@/types/IFuncionario";
-import { IPagination } from "@/types/IPgaination";
+import { IPagination } from "@/types/api/IPgaination";
 import { isException } from "@/utils/error_message";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -144,11 +144,13 @@ export default function Dashboard() {
 	}
 
 	const evento: IEvento = {
+		id: 0,
 		imagem: "https://i.pinimg.com/736x/f4/67/1a/f4671aecc3b283d3a1e5d93d8ba0d5c4.jpg",
 		titulo: "Título padrão",
 		descricao: "evento de teste",
 		organizadoPor: "Organizador",
-		dataEvento: new Date(),
+		dataInicio: new Date(),
+		dataFim: new Date(),
 		acompanhar: "remoto",
 		localidade: "Local não informado",
 		website: "#",

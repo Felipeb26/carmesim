@@ -3,7 +3,7 @@
 import { IAgendamento } from "@/types/IAgendamentos";
 import { ICliente } from "@/types/ICliente";
 import { IFuncionario } from "@/types/IFuncionario";
-import { IPagination } from "@/types/IPgaination";
+import { IPagination } from "@/types/api/IPgaination";
 import { formatarStringDate, formatPhoneNumber } from "@/utils/format";
 import { Pencil, XSquare } from "lucide-react";
 

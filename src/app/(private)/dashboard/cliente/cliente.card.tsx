@@ -27,7 +27,7 @@ import { Switch } from "@/components/ui/switch";
 import { useCursor } from "@/providers/cursor.provider";
 import { deleteClient, updateClient } from "@/services/cliente.service";
 import { ICliente } from "@/types/ICliente";
-import { IException } from "@/types/IException";
+import { IException } from "@/types/errors/IException";
 import { formatDocumento } from "@/utils/format";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SelectContent } from "@radix-ui/react-select";

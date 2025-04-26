@@ -21,13 +21,11 @@ export default function EventoCard({ evento }: { evento: IEvento }) {
 		titulo,
 		descricao,
 		organizadoPor,
-		dataEvento,
+		dataFim,
 		acompanhar,
 		localidade,
 		website,
 	} = evento;
-
-	const dataFinal = dataEvento;
 
 	return (
 		<>
@@ -47,14 +45,14 @@ export default function EventoCard({ evento }: { evento: IEvento }) {
 						<Link
 							className="flex flex-row flex-nowrap w-full items-center"
 							href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${titulo}&dates=${formatarStringDateZulu(
-								dataEvento
+								dataFim
 							)}/${formatarStringDateZulu(
-								addHours(dataFinal, 3)
+								addHours(dataFim, 3)
 							)}&details=${descricao}&location=${localidade}&sf=true&output=xml`}
 							target="_blank"
 						>
 							<Calendar size="24" color="#710101" />
-							{formatarStringDate(dataEvento, true)}
+							{formatarStringDate(dataFim, true)}
 						</Link>
 					</Label>
 					<Label>{descricao}</Label>

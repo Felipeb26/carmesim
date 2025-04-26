@@ -1,9 +1,9 @@
 "use server"
 
 import AutoCarousel from "@/components/shared/carrousel/autocarrousel";
-import { changeTheme } from "@/components/shared/header/ThemeButton";
 import Instagram from "@/components/shared/icons/Instagram";
 import WhatsApp from "@/components/shared/icons/Whatsapp";
+import { CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -23,8 +23,11 @@ export default async function Home() {
 		"/images/seio_tattoo.webp",
 	]
 
-	const artistas: string[] = ["/images/women-tattoo.webp", "/images/women-tattoo-floral.webp"]
-
+	const artistas: string[] = [
+		"/images/women-tattoo.webp",
+		"/images/women-tattoo-floral.webp",
+		"/images/secretario.webp"
+	]
 	async function gotoScreenArtistas() {
 		"use server"
 		redirect("/artistas")
@@ -36,19 +39,20 @@ export default async function Home() {
 	}
 
 	return (
-		<>
-			<main className="flex flex-col h-[calc(80lvh_-_var(--spacing)_*_25)]" onLoad={changeTheme}>
-				<div className="flex flex-col lg:flex-row flex-1">
-					<div className="flex-[0.1] lg:max-w-[3rem] flex items-center justify-center bg-red-800 w-full">
+		<main className="flex-1 flex-col">
+			<div className="flex-1/2">
+				<div className="flex flex-col lg:flex-row h-fit">
+
+					<div className="flex-[0.1] lg:max-w-[3rem] flex items-center justify-center bg-red-800">
 						<p className="lg:rotate-90 w-full uppercase font-bold whitespace-nowrap text-center flex flex-nowrap justify-center gap-5 text-white">
 							<Link
-								className="text-blue-300 hover:text-blue-400 underline font-semibold transition flex items-center gap-2"
+								className="text-purple-300 hover:text-purple-400 underline font-semibold transition flex items-center gap-2"
 								href="https://www.instagram.com/"
 								target="_blank"
 								rel="noopener noreferrer"
 							>
 								<Instagram />
-								@instagram
+								instagram
 							</Link>
 							&nbsp;/&nbsp;
 							<Link
@@ -58,35 +62,29 @@ export default async function Home() {
 								rel="noopener noreferrer"
 							>
 								<WhatsApp />
-								@whatsapp
+								whatsapp
 							</Link>
 						</p>
 					</div>
-					<div className="flex-1 bg-black opacity-85 pt-8 pb-2 lg:py-0 lg:content-center px-10 text-white">
-						<h1 className="text-3xl font-bold tracking-wide font-serif mb-5">
+
+					<div className="flex-1 flex flex-nowrap flex-col bg-black opacity-85 pt-8 pb-2 lg:py-0 lg:content-center px-10 text-white gap-4 justify-center">
+						<h1 className="text-3xl font-bold tracking-wide font-serif">
 							Studio Carmesim
 						</h1>
-						<p>
-							é um espaço onde arte, identidade e alma se
-							encontram. Com uma equipe de artistas talentosos e
-							autorais, oferecemos tatuagens personalizadas,
-							feitas com técnica, cuidado e estilo. Inspirados por
-							elementos místicos, culturais e contemporâneos,
-							criamos obras que eternizam histórias na pele. Com
-							um ambiente acolhedor e seguro, priorizamos a
-							experiência única de cada cliente, desde a primeira
-							ideia até o traço final. No Carmesim, cada tatuagem
-							carrega significado, essência e personalidade.
+						<CardTitle className="mb-3 tracking-wider">
+							Transforme Sua História em Arte: Tatuagens Exclusivas Para Você!
+						</CardTitle>
+						<p>Cada tatuagem que fazemos é única, assim como você. Nossa missão é ajudar a expressar sua verdadeira essência através de uma arte duradoura e personalizada. Com artistas experientes e dedicados, criamos tatuagens que falam por si mesmas. Entre em contato e venha criar sua próxima obra de arte!
 						</p>
-						<p>
-							Agende sua sessão e transforme sua inspiração em
-							arte.
-						</p>
+						<Link href={"/contatos"} className="font-bold text-blue-500 underline cursor-pointer">
+							Agende sua consulta agora e comece sua jornada para uma tatuagem inesquecível!
+						</Link>
 					</div>
-					<div className="flex-1 bg-[#000000d9] justify-center flex xls:flex p-5">
+
+					<div className="flex-1 flex bg-[#000000d9] items-baseline xls:flex p-5">
 						<Image
 							className="w-full max-h-[70%] aspect-square min-h[200px] rounded-sm"
-							src="/images/mandala.webp"
+							src="/images/mandala_eu.webp"
 							alt="imagem"
 							width="240"
 							height="240"
@@ -94,8 +92,8 @@ export default async function Home() {
 						/>
 					</div>
 				</div>
-			</main>
-			<section className="bg-[#0B0B0B] grid grid-cols-2 lg:grid-cols-4 gap-6 px-4 py-8 text-white">
+			</div>
+			<section className="bg-[#0B0B0B] flex-1/2 grid grid-cols-2 lg:grid-cols-4 gap-6 px-4 py-8 text-white">
 				<div className="bg-[#5E3838] flex justify-center items-center p-1 lg:ml-10 rounded-2xl transition-opacity duration-700 opacity-0 animate-[fadeIn_0.7s_forwards]">
 					<Image
 						className="w-full aspect-auto rounded-lg"
@@ -133,6 +131,6 @@ export default async function Home() {
 					</div>
 				</div>
 			</section>
-		</>
+		</main>
 	);
 }

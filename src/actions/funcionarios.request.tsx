@@ -1,8 +1,10 @@
 "use server"
 
 import { findAllWorkers } from "@/services/funcionario.service";
-import { IException } from "@/types/IException";
+import { CustomHeaders } from "@/types/api/ApiPage";
+import { IException } from "@/types/errors/IException";
 import { getErrorMessage } from "@/utils/error_message";
+import { API_KEY } from "@/utils/variables";
 
 interface PageProps {
 	page?: number, size?: number
@@ -10,7 +12,13 @@ interface PageProps {
 
 export async function getFuncionariosAction({ page = 0, size = 10 }: PageProps) {
 	try {
-		const customHeaders = { cache: "force-cache", "X-API-KEY": "minha-chave-top-secreta-123" }
+		if (!API_KEY) {
+			throw new Error("api key naão existe")
+		}
+		
+		const customHeaders: CustomHeaders = { cache: "force-cache", "X-API-KEY": API_KEY, next: { revalidade: 60, tags: ["funcionarios"] } }
+
+
 		return await findAllWorkers({ page, size, customHeaders });
 	} catch (err: unknown) {
 		console.log(err)

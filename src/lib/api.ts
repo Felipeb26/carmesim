@@ -1,6 +1,6 @@
 "use server";
 
-import { IException } from "@/types/IException";
+import { IException } from "@/types/errors/IException";
 import { getErrorMessage } from "@/utils/error_message";
 import { API_HOST, DEFAULT_HEADER } from "@/utils/variables";
 
@@ -8,8 +8,12 @@ export async function fetchApi<T, D = unknown>(
 	endpoint: string,
 	method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
 	data?: D,
-	customHeaders?: Record<string, string>,
-	timeout?: number
+	customHeaders?: Record<string, string | object>,
+	timeout?: number,
+	next?: {
+		revalidate?: number;
+		tags?: string[];
+	}
 ): Promise<T | IException> {
 	const url = API_HOST.concat(endpoint);
 
@@ -23,9 +27,10 @@ export async function fetchApi<T, D = unknown>(
 		headers: {
 			...DEFAULT_HEADER,
 			...customHeaders,
-			...(isForceCache ? {} : { "Cache-Control": "no-store" }),
 		},
 		signal: controller.signal,
+		cache: isForceCache ? "force-cache" : "no-store",
+		next: next
 	};
 
 	if (data && (method === "POST" || method === "PUT")) {
