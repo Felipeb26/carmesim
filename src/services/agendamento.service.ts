@@ -7,16 +7,17 @@ import { deleteCookie, retrieveCookie } from "@/actions/cookie.action";
 
 export async function findAllAgendamentos({ page, size }: { page: number, size: number }) {
 
-    const token = await retrieveCookie("token")
-    if (!token) {
-        return { status: 401, message: "unathorized" } as IException
-    }
-    const authorization: Record<string, string> = { "authorization": `Bearer ${token}` }
-    const response = await fetchApi<IPagination<IAgendamento>>(`agendamento/paginate?page=${page}&size=${size}`, "GET", null, authorization)
+	const token = await retrieveCookie("token")
+	if (!token) {
+		return new IException([], "Unathorized", "/agendamentos", 401)
+	}
+	const authorization: Record<string, string> = { "authorization": `Bearer ${token}` }
+	const response = await fetchApi<IPagination<IAgendamento>>(`agendamento/paginate?page=${page}&size=${size}`, "GET", null, authorization)
 
-    if ("status" in response && (response.status === 401 || response.status === 403)) {
-        deleteCookie("token")
-        return { status: 401, message: "unathorized" } as IException
-    }
-    return response
+	if ("status" in response && (response.getStatus() === 401 || response.getStatus() === 403)) {
+		deleteCookie("token")
+		response.setMessage("Unathorized")
+		return response;
+	}
+	return response
 }

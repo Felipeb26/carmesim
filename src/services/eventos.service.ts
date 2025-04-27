@@ -30,9 +30,9 @@ export async function findAllEventos({ page, size, customHeaders }: APiPage) {
 
 		const response = await fetchApi<IPagination<IEvento>>(`eventos/paginate?page=${page}&size=${size}`, "GET", null, headers, undefined, next)
 
-		if ("status" in response && (response.status === 401 || response.status === 403)) {
+		if ("status" in response && (response.getStatus() === 401 || response.getStatus() === 403)) {
 				deleteCookie("token")
-				return { status: 401, message: "unathorized" } as IException
+			return new IException([], "Unathorized", "/eventos", 401)
 		}
 		return response
 }
