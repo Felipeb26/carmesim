@@ -95,7 +95,11 @@ export async function apiRetry<T>(
 	delayMs = 1000
 ): Promise<T> {
 	try {
-		return await fn();
+		const response = await fn();
+		if(response instanceof IException){
+			throw new Error()
+		}
+		return response;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
 		if (retries <= 0 || !(error instanceof IException)) {
