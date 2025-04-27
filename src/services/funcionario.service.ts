@@ -1,9 +1,8 @@
-import { fetchApi } from "@/lib/api";
-import { IException } from "@/types/errors/IException";
-import { IFuncionario } from "@/types/IFuncionario";
-import { IPagination } from "@/types/api/IPgaination";
 import { deleteCookie, retrieveCookie } from "@/actions/cookie.action";
+import { fetchApi } from "@/lib/api";
 import { APiPage } from "@/types/api/ApiPage";
+import { IPagination } from "@/types/api/IPgaination";
+import { IFuncionario } from "@/types/IFuncionario";
 
 export async function findAllWorkers({ page, size, customHeaders }: APiPage) {
 	const token = await retrieveCookie("token");
@@ -38,10 +37,11 @@ export async function findAllWorkers({ page, size, customHeaders }: APiPage) {
 
 	if (
 		"status" in response &&
-		(response.status == 401 || response.status == 403)
+		(response.getStatus() == 401 || response.getStatus() == 403)
 	) {
 		deleteCookie("token");
-		return { status: 401, message: "unathorized" } as IException;
+		response.setMessage("Unauthorize acess");
+		return response;
 	}
 	return response;
 }

@@ -13,15 +13,21 @@ interface PageProps {
 export async function getFuncionariosAction({ page = 0, size = 10 }: PageProps) {
 	try {
 		if (!API_KEY) {
-			throw new Error("api key naão existe")
+			throw new Error("api key não existe")
 		}
-		
+
 		const customHeaders: CustomHeaders = { cache: "force-cache", "X-API-KEY": API_KEY, next: { revalidade: 60, tags: ["funcionarios"] } }
 
 
 		return await findAllWorkers({ page, size, customHeaders });
-	} catch (err: unknown) {
+	} catch (err) {
 		console.log(err)
-		return { status: 400, message: getErrorMessage(err) } as IException;
+		return new IException(
+						[],
+						getErrorMessage((err as Error).message),
+						"endpoint",
+						500,
+						undefined,
+					);
 	}
 }

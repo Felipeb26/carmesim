@@ -30,7 +30,7 @@ export async function fetchApi<T, D = unknown>(
 		},
 		signal: controller.signal,
 		cache: isForceCache ? "force-cache" : "no-store",
-		next: next
+		next: next,
 	};
 
 	if (data && (method === "POST" || method === "PUT")) {
@@ -46,10 +46,13 @@ export async function fetchApi<T, D = unknown>(
 		if (!response.ok) {
 			const errorText = await response.text();
 			clearTimeout(id);
-			return {
+			return new IException(
+				[],
+				getErrorMessage(errorText),
+				endpoint,
 				status,
-				message: getErrorMessage(errorText) || "Erro desconhecido",
-			} as IException;
+				undefined,
+			);
 		}
 
 		if (!contentType || !contentType.includes("application/json")) {
@@ -76,9 +79,29 @@ export async function fetchApi<T, D = unknown>(
 	} catch (error: any) {
 		clearTimeout(id);
 		console.error("Erro ao fazer requisição:", error);
-		return {
-			status: 500,
-			message: error.message || "Erro de rede ou servidor",
-		} as IException;
+		return  new IException(
+				[],
+				getErrorMessage(error.message),
+				endpoint,
+				500,
+				undefined,
+			);
+	}
+}
+
+export async function apiRetry<T>(
+	fn: () => Promise<T>,
+	retries = 3,
+	delayMs = 1000
+): Promise<T> {
+	try {
+		return await fn();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		if (retries <= 0 || !(error instanceof IException)) {
+			throw error;
+		}
+		await new Promise((resolve) => setTimeout(resolve, delayMs));
+		return apiRetry(fn, retries - 1, delayMs);
 	}
 }

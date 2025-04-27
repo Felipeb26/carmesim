@@ -27,6 +27,11 @@ export async function getEventosAction({ page = 0, size = 10 }: PageProps) {
 		return await findAllEventos({ page, size, customHeaders });
 	} catch (err: unknown) {
 		console.log(err)
-		return { status: 400, message: getErrorMessage(err) } as IException;
-	}
+		return new IException(
+						[],
+						getErrorMessage((err as Error).message),
+						"endpoint",
+						500,
+						undefined,
+					);	}
 }

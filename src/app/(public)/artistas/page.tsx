@@ -7,6 +7,7 @@ import { formatPhoneNumber } from "@/utils/format";
 import { Metadata } from "next";
 import Image from "next/image";
 import { Suspense } from "react";
+import { apiRetry } from "@/lib/api"
 
 export async function generateMetadata(): Promise<Metadata> {
 	return {
@@ -24,7 +25,7 @@ export default async function Artistas() {
 	]
 
 
-	const data = await getFuncionariosAction({ page: 0, size: 10 })
+	const data = await apiRetry(() => getFuncionariosAction({ page: 0, size: 10 }))
 	if ("status" in data) {
 		return (
 			<main className="bg-black flex flex-1 justify-center items-center text-white p-10">
@@ -39,8 +40,8 @@ export default async function Artistas() {
 			<main className="flex flex-1 flex-row flex-wrap justify-center sm:justify-around bg-[#000000d6] py-15 px-1 sm:px-10 gap-4">
 				{artistas.map((func, index) => {
 					return (
-						<Card key={index} className="min-w-[350px] flex flex-col px-3 h-fit shadow-md bg-zinc-700 border border-zinc-500">
-							<CardTitle className="text-lg tracking-wider font-bold">
+						<Card key={index} className="min-w-[350px] w-[22%] flex flex-col px-3 h-fit shadow-md bg-zinc-700 border border-zinc-500 text-white">
+							<CardTitle className="text-2xl tracking-wider font-serif font-bold">
 								{func.nome}
 							</CardTitle>
 							<Image
@@ -76,3 +77,4 @@ export default async function Artistas() {
 		</Suspense>
 	);
 }
+
