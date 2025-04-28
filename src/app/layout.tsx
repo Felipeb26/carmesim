@@ -11,10 +11,14 @@ import { CursorProvider } from "@/providers/cursor.provider";
 import { Suspense } from "react";
 import Loader from "./loader.page";
 import CookieConsent from "@/components/shared/consent/coockie.consent";
+
+
 export const metadata: Metadata = {
 	title: "Studio Carmesim",
 	description:
 		"Studio Carmesim - Arte autoral e tatuagens personalizadas com essência e identidade.",
+	manifest: '/site.webmanifest',
+	icons: "/icons/favicon.ico",
 	openGraph: {
 		title: "Carmesim Studio",
 		description: "Studio Carmesim where you body become a art",
@@ -30,24 +34,20 @@ export default function RootLayout({
 }>) {
 
 	return (
-		<html lang="pt-br">
+		<html lang="pt-BR">
 			<Head>
 				<meta
 					name="viewport"
 					content="width=device-width, initial-scale=1"
 				/>
 				<meta charSet="UTF-8" />
-				<meta
-					name="description"
-					content="Studio Carmesim - Arte autoral e tatuagens personalizadas com essência e identidade."
-				/>
 				<meta name="referrer" content="no-referrer-when-downgrade" />
 				<meta httpEquiv="X-Content-Type-Options" content="nosniff" />
 				<meta
 					httpEquiv="Content-Security-Policy"
 					content="default-src 'self'; script-src 'self'; object-src 'none';"
 				/>
-				<link rel="icon" href="/favicon.ico" />
+				<link rel="icon" href="/icons/favicon.ico" />
 			</Head>
 			<body className={cn(`font-sans antialiased min-h-screen flex flex-col`, inter.className)}>
 				<Toaster

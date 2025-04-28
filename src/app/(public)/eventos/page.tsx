@@ -27,7 +27,7 @@ export default function Evento() {
 		return <Loader />
 	}
 
-	if (!content) {
+	if (!content || content instanceof Error) {
 		return (
 			<main className="bg-black flex flex-1 justify-center items-center text-white p-10 flex-col">
 				<h1 className="text-2xl font-bold">Ainda nenhum evento encontrado</h1>
@@ -38,7 +38,7 @@ export default function Evento() {
 		)
 	}
 
-	if ("status" in content || content.data.length <= 0) {
+	if ("status" in content || (content.data && content.data.length <= 0)) {
 		return (
 			<main className="bg-black flex flex-1 justify-center items-center text-white p-10 flex-col">
 				<div className="text-center">
@@ -65,6 +65,7 @@ export default function Evento() {
 	};
 
 	const eventos = content.data
+	console.log(eventos)
 	return (
 		<>
 			<main className="bg-[var(--light-background)]  min-h-screen flex flex-1 flex-col gap-10 text-white py-10 px-5">

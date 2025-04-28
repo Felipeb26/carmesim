@@ -27,13 +27,27 @@ export default async function Artistas() {
 
 	const data = await getFuncionariosAction({ page: 0, size: 10 })
 
+
+	if (!data || data instanceof Error) {
+		return (
+			<main className="bg-black flex flex-1 justify-center items-center text-white p-10">
+				<div className="text-center">
+					<h1 className="text-2xl font-bold mb-4">Sem artistas encontrados</h1>
+					<p className="text-gray-400">
+						Ocorreu um erro ao carregar os artistas. Tente novamente mais tarde.
+					</p>
+				</div>
+			</main>
+		);
+	}
+
 	if ("status" in data) {
 		return (
 			<main className="bg-black flex flex-1 justify-center items-center text-white p-10">
 				<div className="text-center">
 					<h1 className="text-2xl font-bold mb-4">Sem artistas encontrados</h1>
 					<p className="text-gray-400">
-						{data.getMessage() || "Ocorreu um erro ao carregar os artistas. Tente novamente mais tarde."}
+						Ocorreu um erro ao carregar os artistas. Tente novamente mais tarde.
 					</p>
 				</div>
 			</main>
@@ -67,7 +81,7 @@ export default async function Artistas() {
 									height={240}
 								/>
 								<CardDescription>
-									<p>	
+									<p>
 										{func.bio}
 									</p>
 									<span>

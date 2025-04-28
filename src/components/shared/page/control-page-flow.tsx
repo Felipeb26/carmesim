@@ -26,7 +26,7 @@ export default function ControlPageFlow(
 
 
 	return (
-		<div className="max-h-fit w-full lg:w-1/2  lg:max-w-1/2 flex flex-wrap items-center justify-between items-center bg-[#000000a9] p-5 rounded-sm gap-2">
+		<div className="max-h-fit w-full lg:w-1/2  lg:max-w-1/2 flex flex-wrap items-center justify-between bg-[#000000a9] p-5 rounded-sm gap-2">
 			<select
 				id="pageSize"
 				value={page.size}

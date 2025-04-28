@@ -46,7 +46,7 @@ export default async function Home() {
 	return (
 		<main className="flex-1 flex-col">
 			<div className="flex-1/2">
-				<div className="flex flex-col lg:flex-row h-fit">
+				<div className="flex flex-col lg:flex-row h-fit lg:max-h-[850px]">
 
 					<div className="flex-[0.1] lg:max-w-[3rem] flex items-center justify-center bg-red-800">
 						<p className="lg:rotate-90 w-full uppercase font-bold whitespace-nowrap text-center flex flex-nowrap justify-center gap-5 text-white">
@@ -72,21 +72,21 @@ export default async function Home() {
 						</p>
 					</div>
 
-					<div className="flex-1 flex flex-nowrap flex-col bg-black opacity-85 pt-8 pb-2 lg:py-0 lg:content-center px-10 text-white gap-4 justify-center">
+					<div className="flex-1/5 flex flex-nowrap flex-col bg-black opacity-85 pt-8 pb-2 lg:py-0 lg:content-center px-6 sm:px-8 lg:px-10 text-white gap-4 justify-center">
 						<h1 className="text-3xl font-bold tracking-wide font-serif">
 							Studio Carmesim
 						</h1>
-						<CardTitle className="mb-3 tracking-wider">
+						<CardTitle className="mb-3 tracking-wider text-lg font-serif">
 							Transforme Sua História em Arte: Tatuagens Exclusivas Para Você!
 						</CardTitle>
-						<p>Cada tatuagem que fazemos é única, assim como você. Nossa missão é ajudar a expressar sua verdadeira essência através de uma arte duradoura e personalizada. Com artistas experientes e dedicados, criamos tatuagens que falam por si mesmas. Entre em contato e venha criar sua próxima obra de arte!
+						<p className="leading-relaxed whitespace-normal break-words hyphens-auto">Cada tatuagem que fazemos é única, assim como você. Nossa missão é ajudar a expressar sua verdadeira essência através de uma arte duradoura e personalizada. Com artistas experientes e dedicados, criamos tatuagens que falam por si mesmas. Entre em contato e venha criar sua próxima obra de arte!
 						</p>
-						<Link href={"/contatos"} className="font-bold text-blue-300 underline cursor-pointer tracking-wider hover:text-blue-500">
+						<Link href={"/contatos"} className="font-bold text-[var(--color900)] underline cursor-pointer tracking-wider hover:scale-105 text-center">
 							Agende sua consulta agora e comece sua jornada para uma tatuagem inesquecível!
 						</Link>
 					</div>
 
-					<div className="flex-1 flex bg-[#000000d9] items-baseline xls:flex py-5 px-10">
+					<div className="flex-1 flex items-center bg-[#000000d9] xls:flex py-3 px-[5%]">
 						<Image
 							className="w-full max-h-[70%] aspect-square min-h[200px] rounded-sm"
 							src="/images/mandala_eu.webp"
