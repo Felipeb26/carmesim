@@ -79,33 +79,46 @@ export async function fetchApi<T, D = unknown>(
 	} catch (error: any) {
 		clearTimeout(id);
 		console.error("Erro ao fazer requisição:", error);
-		return  new IException(
-				[],
-				getErrorMessage(error.message),
-				endpoint,
-				500,
-				undefined,
-			);
+		return new IException(
+			[],
+			getErrorMessage(error.message),
+			endpoint,
+			500,
+			undefined,
+		);
 	}
 }
 
-export async function apiRetry<T>(
-	fn: () => Promise<T>,
-	retries = 3,
-	delayMs = 1000
-): Promise<T> {
-	try {
-		const response = await fn();
-		if(response instanceof IException){
-			throw new Error()
+const wait = (time: number) => {
+	new Promise<void>((resolve) => {
+		setTimeout(() => resolve(), time)
+	})
+}
+
+export async function fetchRetry<T, D = unknown>(
+	endpoint: string,
+	method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+	data?: D,
+	customHeaders?: Record<string, string | object>,
+	timeout?: number,
+	next?: {
+		revalidate?: number;
+		tags?: string[];
+	},
+	retries = 2
+): Promise<T | IException> {
+	let count = retries
+	let increaseTimeout = 2
+
+	while (count > 0) {
+		try {
+			return await fetchApi(endpoint, method, data, customHeaders, timeout, next)
+		} catch (err) {
+			count--;
+			increaseTimeout = Math.pow(increaseTimeout, 2)
+			console.log((err as Error).message)
+			await wait(increaseTimeout)
 		}
-		return response;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} catch (error: any) {
-		if (retries <= 0 || !(error instanceof IException)) {
-			throw error;
-		}
-		await new Promise((resolve) => setTimeout(resolve, delayMs));
-		return apiRetry(fn, retries - 1, delayMs);
 	}
+	return Promise.reject(new Error(`Requisição falhou com ${retries} tentativas`))
 }

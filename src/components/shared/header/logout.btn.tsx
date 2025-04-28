@@ -1,6 +1,6 @@
 "use client";
 
-import { exitLogin } from "@/actions/login.request";
+import { exitLogin } from "@/actions/login.actions";
 import { LogOutIcon } from "lucide-react";
 import { useTransition } from "react";
 

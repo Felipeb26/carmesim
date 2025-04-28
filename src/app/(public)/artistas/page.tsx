@@ -1,13 +1,13 @@
 "use server";
 
-import { getFuncionariosAction } from "@/actions/funcionarios.request";
+import { getFuncionariosAction } from "@/actions/funcionarios.actions";
 import Loader from "@/app/loader.page";
+import { SlideInSection } from "@/components/shared/animation/slidein";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { formatPhoneNumber } from "@/utils/format";
 import { Metadata } from "next";
 import Image from "next/image";
 import { Suspense } from "react";
-import { apiRetry } from "@/lib/api"
 
 export async function generateMetadata(): Promise<Metadata> {
 	return {
@@ -25,13 +25,27 @@ export default async function Artistas() {
 	]
 
 
-	const data = await apiRetry(() => getFuncionariosAction({ page: 0, size: 10 }))
+	const data = await getFuncionariosAction({ page: 0, size: 10 })
+
 	if ("status" in data) {
 		return (
 			<main className="bg-black flex flex-1 justify-center items-center text-white p-10">
-				<h1 className="text-2xl font-bold">Sem eventos encontrados</h1>
+				<div className="text-center">
+					<h1 className="text-2xl font-bold mb-4">Sem artistas encontrados</h1>
+					<p className="text-gray-400">
+						{data.getMessage() || "Ocorreu um erro ao carregar os artistas. Tente novamente mais tarde."}
+					</p>
+				</div>
 			</main>
-		)
+		);
+	}
+
+	if (!data.data || data.data.length === 0) {
+		return (
+			<main className="bg-black flex flex-1 justify-center items-center text-white p-10">
+				<h1 className="text-2xl font-bold">Nenhum artista disponível no momento</h1>
+			</main>
+		);
 	}
 
 	const artistas = data.data
@@ -40,37 +54,39 @@ export default async function Artistas() {
 			<main className="flex flex-1 flex-row flex-wrap justify-center sm:justify-around bg-[#000000d6] py-15 px-1 sm:px-10 gap-4">
 				{artistas.map((func, index) => {
 					return (
-						<Card key={index} className="min-w-[350px] w-[22%] flex flex-col px-3 h-fit shadow-md bg-zinc-700 border border-zinc-500 text-white">
-							<CardTitle className="text-2xl tracking-wider font-serif font-bold">
-								{func.nome}
-							</CardTitle>
-							<Image
-								className="w-full aspect-square rounded-md max-h-[350px]"
-								src={photos[index]}
-								alt={`IMagem de numero ${index}`}
-								width={240}
-								height={240}
-							/>
-							<CardDescription>
-								<p>
-									{func.bio}
-								</p>
-								<span>
-									{func.especialidade}
-								</span>
-							</CardDescription>
-							<CardContent className="flex flex-col gap-2 px-0 ">
-								<p>
-									{func.email}
-								</p>
-								<p>
-									{formatPhoneNumber(func.telefone)}
-								</p>
-								<p>
-									{func.funcionarioType}
-								</p>
-							</CardContent>
-						</Card>
+						<SlideInSection key={index}>
+							<Card key={index} className="min-w-[350px] w-[22%] flex flex-col px-3 h-fit shadow-md bg-zinc-700 border border-zinc-500 text-white">
+								<CardTitle className="text-2xl tracking-wider font-serif font-bold">
+									{func.nome}
+								</CardTitle>
+								<Image
+									className="w-full aspect-square rounded-md max-h-[350px]"
+									src={photos[index]}
+									alt={`IMagem de numero ${index}`}
+									width={240}
+									height={240}
+								/>
+								<CardDescription>
+									<p>	
+										{func.bio}
+									</p>
+									<span>
+										{func.especialidade}
+									</span>
+								</CardDescription>
+								<CardContent className="flex flex-col gap-2 px-0 ">
+									<p>
+										{func.email}
+									</p>
+									<p>
+										{formatPhoneNumber(func.telefone)}
+									</p>
+									<p>
+										{func.funcionarioType}
+									</p>
+								</CardContent>
+							</Card>
+						</SlideInSection>
 					)
 				})}
 			</main>

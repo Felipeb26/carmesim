@@ -7,6 +7,6 @@ export interface APiPage {
 export type CustomHeaders = Record<string, string | Next>;
 
 interface Next {
-	revalidade?: number;
+	revalidate?: number;
 	tags?: string[];
 }

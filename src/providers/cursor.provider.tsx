@@ -14,11 +14,6 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
 		document.body.style.cursor = loading ? "wait" : "default";
 	}, [loading]);
 
-	const resetTheme = () => {
-		const body = document.body;
-		body.classList.add("light")
-	}
-
 	return (
 		<>
 			<CursorContext.Provider value={{ setLoading }} >

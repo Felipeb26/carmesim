@@ -1,7 +1,7 @@
 "use client";
 
 import { retrieveCookie, saveCookie } from "@/actions/cookie.action";
-import { authenticateAction } from "@/actions/login.request";
+import { authenticateAction } from "@/actions/login.actions";
 import { Button } from "@/components/ui/button";
 import {
 	Form,

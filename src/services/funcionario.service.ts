@@ -1,5 +1,5 @@
 import { deleteCookie, retrieveCookie } from "@/actions/cookie.action";
-import { fetchApi } from "@/lib/api";
+import { fetchRetry } from "@/lib/api";
 import { APiPage } from "@/types/api/ApiPage";
 import { IPagination } from "@/types/api/IPgaination";
 import { IFuncionario } from "@/types/IFuncionario";
@@ -26,7 +26,7 @@ export async function findAllWorkers({ page, size, customHeaders }: APiPage) {
 		}
 	}
 
-	const response = await fetchApi<IPagination<IFuncionario>>(
+	const response = await fetchRetry<IPagination<IFuncionario>>(
 		`funcionario/paginate?page=${page}&size=${size}`,
 		"GET",
 		null,

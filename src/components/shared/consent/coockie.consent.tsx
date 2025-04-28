@@ -29,7 +29,7 @@ export default function CookieConsent() {
 	}, []);
 
 	const acceptCookies = async () => {
-		await saveCookie({ id: "cookieConsent", to_guard: "true", time: 60 * 60 * 24 * 30});
+		await saveCookie({ id: "cookieConsent", to_guard: "true", time: 60 * 60 * 24 * 30 });
 		setOpen(false);
 	};
 

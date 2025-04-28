@@ -38,6 +38,11 @@ export default async function Home() {
 		redirect("/galeria")
 	}
 
+	async function gotoScreenContatos() {
+		"use server"
+		redirect("/contatos")
+	}
+
 	return (
 		<main className="flex-1 flex-col">
 			<div className="flex-1/2">
@@ -76,12 +81,12 @@ export default async function Home() {
 						</CardTitle>
 						<p>Cada tatuagem que fazemos é única, assim como você. Nossa missão é ajudar a expressar sua verdadeira essência através de uma arte duradoura e personalizada. Com artistas experientes e dedicados, criamos tatuagens que falam por si mesmas. Entre em contato e venha criar sua próxima obra de arte!
 						</p>
-						<Link href={"/contatos"} className="font-bold text-blue-500 underline cursor-pointer">
+						<Link href={"/contatos"} className="font-bold text-blue-300 underline cursor-pointer tracking-wider hover:text-blue-500">
 							Agende sua consulta agora e comece sua jornada para uma tatuagem inesquecível!
 						</Link>
 					</div>
 
-					<div className="flex-1 flex bg-[#000000d9] items-baseline xls:flex p-5">
+					<div className="flex-1 flex bg-[#000000d9] items-baseline xls:flex py-5 px-10">
 						<Image
 							className="w-full max-h-[70%] aspect-square min-h[200px] rounded-sm"
 							src="/images/mandala_eu.webp"
@@ -111,7 +116,9 @@ export default async function Home() {
 						<AutoCarousel images={images} />
 					</div>
 				</div>
-				<div className="flex flex-col lg:px-10 transition-opacity duration-700 opacity-0 animate-[fadeIn_0.7s_forwards] gap-2 cursor-pointer">
+				<div
+					onClick={gotoScreenContatos}
+					className="flex flex-col lg:px-10 transition-opacity duration-700 opacity-0 animate-[fadeIn_0.7s_forwards] gap-2 cursor-pointer">
 					<h1 className="capitalize font-bold text-2xl">Booking</h1>
 					<div className="bg-transparent border-2 p-2 rounded-sm flex justify-center items-center">
 						<Image
