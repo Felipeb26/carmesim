@@ -100,7 +100,7 @@ export default function Evento() {
 					previousPage={handleChangePageChange}
 					nextPage={handleChangePageChange}
 				>
-					{/* <Form {...form}>
+					<Form {...form}>
 						<form className="w-full grid grid-cols-2 gap-5 my-2">
 							<FormField
 								control={form.control}
@@ -161,7 +161,7 @@ export default function Evento() {
 								enviar
 							</button>
 						</form>
-					</Form> */}
+					</Form>
 				</ControlPageFlow>
 
 
