@@ -1,5 +1,6 @@
 "use client"
 
+import { SlideInSection } from "@/components/shared/animation/slidein";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -11,9 +12,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { formatPhoneNumber } from "@/utils/format";
+import { formatarStringDate, formatPhoneNumber } from "@/utils/format";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Clock, MapPin } from "lucide-react";
+import { Clock, MapPin, Star, ThumbsUp } from "lucide-react";
+import Image from "next/image";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -42,6 +44,42 @@ const formSchema = z.object({
 	newsletter: z.boolean().optional(),
 });
 
+const fakeComments = [
+	{
+		id: 1,
+		user: { name: "João Silva", avatar: "/avatar1.png" },
+		rating: 4,
+		date: "2025-04-20",
+		text: "Muito bom atendimento, recomendo!",
+		likes: 12,
+	},
+	{
+		id: 2,
+		user: { name: "Maria Oliveira", avatar: "/avatar2.png" },
+		rating: 5,
+		date: "2025-04-19",
+		text: "Melhor experiência que tive nos últimos tempos.",
+		likes: 30,
+	},
+	{
+		id: 3,
+		user: { name: "Carlos Andrade", avatar: "/avatar3.png" },
+		rating: 3,
+		date: "2025-04-18",
+		text: "Bom, mas poderia ser mais rápido no atendimento.",
+		likes: 5,
+	},
+	{
+		id: 4,
+		user: { name: "Fernanda Costa", avatar: "/avatar4.png" },
+		rating: 4.5,
+		date: "2025-04-15",
+		text: "Ambiente limpo, organizado e profissionais incríveis!",
+		likes: 22,
+	}
+];
+
+
 export default function Contato() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -58,7 +96,6 @@ export default function Contato() {
 		console.log(data)
 		toast.success('Email não enviado com sucesso');
 	}
-
 
 	return (
 		<main className="bg-[var(--light-background)] flex flex-1 flex-col items-center text-white pt-10 px-8 gap-5">
@@ -203,6 +240,39 @@ export default function Contato() {
 						Aberto de terça a domingo das 09:00 às 20:00
 					</p>
 				</span>
+			</div>
+
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-4 gap-6">
+				{fakeComments.map((comment, index) => (
+					<SlideInSection key={index}>
+						<div key={comment.id} className="flex items-start gap-4 bg-zinc-900 p-4 rounded-xl cursor-pointer">
+							<Image
+								src={"/images/icognito_user.webp"}
+								width={50}
+								height={50}
+								alt={comment.user.name}
+								className="w-10 h-10 rounded-full object-cover"
+							/>
+							<div className="flex-1">
+								<div className="flex justify-between items-center">
+									<span className="font-semibold">{comment.user.name}</span>
+									<span className="text-sm text-zinc-400">{formatarStringDate(comment.date)}</span>
+								</div>
+								<div className="flex items-center gap-1 text-yellow-400 mb-1">
+									{Array.from({ length: comment.rating }, (_, i) => (
+										<Star key={i} size={16} fill="currentColor" />
+									))}
+								</div>
+								<p className="text-zinc-300">{comment.text}</p>
+								<div className="flex items-center gap-4 mt-2 text-zinc-400 text-sm">
+									<button className="flex items-center gap-1 hover:text-white">
+										<ThumbsUp size={16} /> {comment.likes}
+									</button>
+								</div>
+							</div>
+						</div>
+					</SlideInSection>
+				))}
 			</div>
 
 		</main>

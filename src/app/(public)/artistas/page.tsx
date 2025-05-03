@@ -1,7 +1,7 @@
 "use server";
 
 import { getFuncionariosAction } from "@/actions/funcionarios.actions";
-import Loader from "@/app/loader.page";
+import Loader from "@/app/loading";
 import { SlideInSection } from "@/components/shared/animation/slidein";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { formatPhoneNumber } from "@/utils/format";

@@ -1,19 +1,40 @@
 "use client"
 
 import { getEventosAction } from "@/actions/eventos.request";
-import Loader from "@/app/loader.page";
+import Loader from "@/app/loading";
 import { SlideInSection } from "@/components/shared/animation/slidein";
 import ControlPageFlow from "@/components/shared/page/control-page-flow";
+import { Button } from "@/components/ui/button";
+import CalendarWithYearSelector from "@/components/ui/calendar.year";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRequest } from "@/hooks/query";
 import { formatarStringDate } from "@/utils/format";
-import { Minus } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format, subYears } from "date-fns";
+import { CalendarIcon, Minus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { Form, useForm } from "react-hook-form";
+import { z } from "zod";
+
+
+const formSchema = z.object({
+	dataDe: z.date().min(new Date(), { message: "Data não pode ser futura" }),
+	dataAte: z.date().min(new Date(), { message: "Data não pode ser futura" }),
+});
 
 export default function Evento() {
 	const [page, setPage] = useState({ currentPage: 0, size: 10 });
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			dataDe: new Date(),
+			dataAte: new Date()
+		},
+	});
 
 	const { data: content, isLoading } = useRequest({
 		key: ["eventos_page", page],
@@ -64,52 +85,109 @@ export default function Evento() {
 		});
 	};
 
+
+	// Buscar eventos por data
+
+
 	const eventos = content.data
-	console.log(eventos)
 	return (
 		<>
 			<main className="bg-[var(--light-background)]  min-h-screen flex flex-1 flex-col gap-10 text-white py-10 px-5">
 				<ControlPageFlow
 					color="var(--color950)" hoverColor="var(--color900)"
-					page={{ currentPage: page.currentPage, size: page.size, "totalPages": content.totalPages }}
+					page={{ currentPage: page.currentPage, size: page.size, totalItems: content.totalItems, "totalPages": content.totalPages }}
 					changePageSize={handleChangePageSize}
-					previosPage={handleChangePageChange}
+					previousPage={handleChangePageChange}
 					nextPage={handleChangePageChange}
-					props={
-						<div className="w-full grid grid-cols-2 gap-5 my-2">
-							<Input type="date" />
-							<Input type="date" />
-						</div>
+				>
+					{/* <Form {...form}>
+						<form className="w-full grid grid-cols-2 gap-5 my-2">
+							<FormField
+								control={form.control}
+								name="dataDe"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Data de Nascimento</FormLabel>
+										<Popover>
+											<PopoverTrigger asChild>
+												<FormControl>
+													<Button variant={"outline"}>
+														{field.value ? (
+															format(
+																field.value,
+																"dd/MM/yyyy"
+															)
+														) : (
+															<span>
+																Selecione uma data
+															</span>
+														)}
+														<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+													</Button>
+												</FormControl>
+											</PopoverTrigger>
+											<PopoverContent
+												className="w-auto p-0"
+												align="start"
+											>
+												<CalendarWithYearSelector
+													minYear={1950}
+													maxYear={subYears(
+														new Date(),
+														16
+													).getFullYear()}
+													selected={field.value}
+													today={
+														new Date()
+													}
+													onSelect={(date) => {
+														if (date) {
+															field.onChange(date);
+														}
+													}}
+													onDisabled={(date) =>
+														date >
+														subYears(new Date(), 10) ||
+														date < new Date("1900-01-01")
+													}
+												/>
+											</PopoverContent>
+										</Popover>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<button type="submit">
+								enviar
+							</button>
+						</form>
+					</Form> */}
+				</ControlPageFlow>
 
-					}
-				/>
+
 				<div className="w-full  mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-
 					{eventos.map((evento, index) => (
 						<SlideInSection key={index}>
-							<Card
-								key={index}
-								className="group p-6 rounded-2xl shadow-md bg-zinc-700 border border-zinc-500 hover:border-white hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
-							>
+							<Card className="group p-6 rounded-2xl bg-zinc-800 border border-zinc-700 shadow-md hover:border-[var(--color950)] hover:shadow-pink-700/30 transition-all duration-300 hover:scale-[1.02] cursor-pointer">
 								<div className="flex flex-col items-center text-center h-full text-gray-300">
 									<Image
-										className="w-full h-48 object-cover rounded-lg mb-4"
-										src="/images/mandala.webp"
+										className="w-full h-48 object-cover rounded-lg mb-4 transition duration-300 group-hover:brightness-125 group-hover:scale-105"
+										src="/images/mandala_eu.webp"
 										alt={evento.titulo}
-										width={240}
-										height={240}
+										width={100}
+										height={100}
 										priority
 									/>
-									<CardTitle className="text-xl font-bold mb-2">{evento.titulo}</CardTitle>
-									<CardDescription className="text-base mb-6">
+									<CardTitle className="text-xl font-bold text-white mb-2">{evento.titulo}</CardTitle>
+									<CardDescription className="text-base text-gray-300 mb-6">
 										{evento.descricao}
 									</CardDescription>
-									<CardContent className="w-full flex flex-row justify-around mb-5">
+									<CardContent className="w-full flex items-center justify-center gap-2 text-sm text-gray-400 mb-5">
 										<span>{formatarStringDate(evento.dataInicio, true)}</span>
-										<Minus />
+										<Minus className="w-4 h-4" />
 										<span>{formatarStringDate(evento.dataFim, true)}</span>
 									</CardContent>
-									<span className="mt-auto text-gray-300 font-bold group-hover:underline">
+									<span className="mt-auto text-gray-200 font-bold group-hover:underline transition trac">
 										Saiba mais →
 									</span>
 								</div>

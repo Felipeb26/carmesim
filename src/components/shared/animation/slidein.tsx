@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export function SlideInSection({ children }: { children: React.ReactNode }) {
+export function SlideInSection({ className, children }: { className?: string, children: React.ReactNode }) {
 	const ref = useRef<HTMLDivElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
 
@@ -26,13 +26,13 @@ export function SlideInSection({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	return (
-		<div
+		<section
 			ref={ref}
-			className={`transition-all duration-700 ease-out transform
+			className={`${className} transition-all duration-700 ease-out transform
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
       `}
 		>
 			{children}
-		</div>
+		</section>
 	);
 }

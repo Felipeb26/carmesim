@@ -9,7 +9,7 @@ import Head from "next/head";
 import "./globals.css";
 import { CursorProvider } from "@/providers/cursor.provider";
 import { Suspense } from "react";
-import Loader from "./loader.page";
+import Loader from "./loading";
 import CookieConsent from "@/components/shared/consent/coockie.consent";
 
 

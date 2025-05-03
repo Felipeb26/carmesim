@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
-import Loader from "@/app/loader.page";
+import Loader from "@/app/loading";
 
 const CursorContext = createContext({
 	setLoading: (loading: boolean) => { },
