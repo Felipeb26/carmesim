@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import CalendarWithYearSelector from "@/components/ui/calendar.year";
+import CalendarSingleWithYearSelector from "@/components/ui/calendar.year";
 import {
 	Form,
 	FormControl,
@@ -155,9 +155,8 @@ export default function ClienteCard({ cliente }: { cliente: ICliente }) {
 			<div className="flex-1 flex flex-row flex-nowrap my-4 lg:my-0 items-center gap-4">
 				<Label
 					htmlFor="edit-delete"
-					className={`text-base  font-bold uppercase ${
-						!checked ? "opacity-100" : "opacity-35"
-					}`}
+					className={`text-base  font-bold uppercase ${!checked ? "opacity-100" : "opacity-35"
+						}`}
 				>
 					Alterar
 				</Label>
@@ -168,9 +167,8 @@ export default function ClienteCard({ cliente }: { cliente: ICliente }) {
 				/>
 				<Label
 					htmlFor="edit-delete"
-					className={`text-base font-bold uppercase ${
-						checked ? "opacity-100" : "opacity-35"
-					}`}
+					className={`text-base font-bold uppercase ${checked ? "opacity-100" : "opacity-35"
+						}`}
 				>
 					Deletar
 				</Label>
@@ -234,7 +232,7 @@ export default function ClienteCard({ cliente }: { cliente: ICliente }) {
 												const rawValue = e.target.value.replace(/\D/g, '');
 												field.onChange(rawValue);
 											}}
-											// {...field}
+										// {...field}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -307,7 +305,7 @@ export default function ClienteCard({ cliente }: { cliente: ICliente }) {
 										className="w-auto p-0"
 										align="start"
 									>
-										<CalendarWithYearSelector
+										<CalendarSingleWithYearSelector
 											minYear={1950}
 											maxYear={subYears(
 												new Date(),
@@ -324,7 +322,7 @@ export default function ClienteCard({ cliente }: { cliente: ICliente }) {
 											}}
 											onDisabled={(date) =>
 												date >
-													subYears(new Date(), 10) ||
+												subYears(new Date(), 10) ||
 												date < new Date("1900-01-01")
 											}
 										/>

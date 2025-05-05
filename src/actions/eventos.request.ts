@@ -1,16 +1,12 @@
 "use server"
 
 import { findAllEventos } from "@/services/eventos.service";
-import { CustomHeaders } from "@/types/api/ApiPage";
+import { APiPage, CustomHeaders } from "@/types/api/ApiPage";
 import { IException } from "@/types/errors/IException";
 import { getErrorMessage } from "@/utils/error_message";
 import { API_KEY } from "@/utils/variables";
 
-interface PageProps {
-	page?: number, size?: number
-}
-
-export async function getEventosAction({ page = 0, size = 10 }: PageProps) {
+export async function getEventosAction({ page = 0, size = 10 }: APiPage) {
 	try {
 		if (!API_KEY) {
 			throw new Error("api key naão existe")

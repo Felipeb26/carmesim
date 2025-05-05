@@ -68,9 +68,12 @@ export function formatarPreco(valor: number | undefined) {
 }
 
 export const formatarStringDate = (
-	date: string | Date,
+	date: string | Date | undefined,
 	horas?: boolean
 ): string => {
+	if(date === undefined){
+		return ""
+	}
 	const isString = typeof date === "string";
 	const containsHora: boolean = isString && date.includes("T");
 

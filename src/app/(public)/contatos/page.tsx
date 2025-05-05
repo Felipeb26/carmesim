@@ -11,11 +11,19 @@ import {
 	FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { sendMail } from "@/services/contato.service";
+import { IContatos } from "@/types/contatos/contatos";
+import { getErrorMessage } from "@/utils/error_message";
 import { formatarStringDate, formatPhoneNumber } from "@/utils/format";
+import { CAPTCHA_TOKEN } from '@/utils/variables';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Clock, MapPin, Star, ThumbsUp } from "lucide-react";
 import Image from "next/image";
+import { useRef, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -42,7 +50,11 @@ const formSchema = z.object({
 		.nonempty("telefone não pode estar vazio"),
 	mensagem: z.string().max(150, "mensagem muito grande").optional(),
 	newsletter: z.boolean().optional(),
+	assunto: z.enum(["Outros assuntos", "Orçamento para tatuagem", "Dúvidas sobre estilo de tatuagem", "Agendamento de sessão", "Consultoria sobre design de tatuagem", "Informações sobre cuidados pós-tatuagem"]),
 });
+
+type ContactFormData = z.infer<typeof formSchema>;
+
 
 const fakeComments = [
 	{
@@ -76,29 +88,60 @@ const fakeComments = [
 		date: "2025-04-15",
 		text: "Ambiente limpo, organizado e profissionais incríveis!",
 		likes: 22,
+	},
+	{
+		id: 4,
+		user: { name: "Fernanda Costa", avatar: "/avatar4.png" },
+		rating: 4.5,
+		date: "2025-04-15",
+		text: "Ambiente limpo, organizado e profissionais incríveis!",
+		likes: 22,
+	},
+	{
+		id: 4,
+		user: { name: "Fernanda Costa", avatar: "/avatar4.png" },
+		rating: 4.5,
+		date: "2025-04-15",
+		text: "Ambiente limpo, organizado e profissionais incríveis!",
+		likes: 22,
 	}
 ];
 
 
 export default function Contato() {
-	const form = useForm<z.infer<typeof formSchema>>({
+	const captchaRef = useRef(null)
+	const [token, setToken] = useState<string | null>(null)
+
+	const form = useForm<ContactFormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			nome: "",
 			email: "",
 			telefone: "",
 			mensagem: "",
+			assunto: "Orçamento para tatuagem",
 			newsletter: true
 		},
 	});
 
 	const submitForm: SubmitHandler<FieldValues> = async (data) => {
-		console.log(data)
-		toast.success('Email não enviado com sucesso');
+		if (!token) {
+			toast.error("Captcha não foi validado!")
+			return
+		}
+		setToken(null)
+		const contato: IContatos = { nome: data.nome, telefone: data.telefone, email: data.email, assunto: data.assunto, newsletter: data.newsletter }
+		console.table(contato)
+		const result = await sendMail({ data: contato })
+		if ("message" in result) {
+			toast.error(getErrorMessage(result))
+		} else {
+			toast.success('Email não enviado com sucesso');
+		}
 	}
 
 	return (
-		<main className="bg-[var(--light-background)] flex flex-1 flex-col items-center text-white pt-10 px-8 gap-5">
+		<main className="bg-[var(--light-background)] flex flex-1 flex-col items-center text-white pt-10 px-10 lg:px-8 gap-5">
 			<h2 className="text-center text-lg mb-4">Entre em contato conosco para marcar uma sessão ou entre em contatos para tirar suas dúvidas</h2>
 			<div className="w-full h-64 rounded-xl overflow-hidden flex justify-center">
 				<a href={link} target="_blank" rel="noopener noreferrer" className="w-[600px] md:w-1/2"
@@ -181,11 +224,63 @@ export default function Contato() {
 					/>
 					<FormField
 						control={form.control}
+						name="assunto"
+						render={({ field }) => (
+							<FormItem>
+								<FormControl>
+									<Select
+										onValueChange={field.onChange}
+										value={field.value}
+									>
+										<SelectTrigger className="w-full">
+											<SelectValue
+												placeholder="Selecione o tipo de documento"
+												className="overflow-ellipsis"
+											/>
+										</SelectTrigger>	
+										<SelectContent
+											position="item-aligned"
+											className="max-w-[90%] py-0 px-2 bg-[var(--light-background)] text-white"
+										>
+											<SelectItem
+												className="bg-gray-700 text-white my-2 font-bold tracking-wider uppercase"
+												value="Orçamento para tatuagem">
+												Orçamento para tatuagem
+											</SelectItem>
+											<SelectItem
+												className="bg-gray-700 text-white my-2 font-bold tracking-wider uppercase"
+												value="Dúvidas sobre estilo de tatuagem">
+												Dúvidas sobre estilo de tatuagem
+											</SelectItem>
+											<SelectItem
+												className="bg-gray-700 text-white my-2 font-bold tracking-wider uppercase"
+												value="Agendamento de sessão">
+												Agendamento de sessão
+											</SelectItem>
+											<SelectItem
+												className="bg-gray-700 text-white my-2 font-bold tracking-wider uppercase"
+												value="Consultoria sobre design de tatuagem">
+												Consultoria sobre design de tatuagem
+											</SelectItem>
+											<SelectItem
+												className="bg-gray-700 text-white my-2 font-bold tracking-wider uppercase"
+												value="Informações sobre cuidados pós-tatuagem">
+												Informações sobre cuidados pós-tatuagem
+											</SelectItem>
+										</SelectContent>
+									</Select>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
 						name="mensagem"
 						render={({ field }) => {
 							return (
 								<FormItem>
-									<FormControl>
+									<FormControl className="h-14">
 										<Textarea
 											className="resize-none"
 											disabled={field.disabled}
@@ -222,6 +317,11 @@ export default function Contato() {
 							</FormItem>
 						)}
 					/>
+					<HCaptcha
+						sitekey={CAPTCHA_TOKEN!}
+						onVerify={(token: string) => setToken(token)}
+						ref={captchaRef}
+					/>
 					<Button type="submit" className="text-lg tracking-wider bg-[var(--color950)]">
 						enviar
 					</Button>
@@ -243,7 +343,7 @@ export default function Contato() {
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-4 gap-6">
-				{fakeComments.map((comment, index) => (
+				{fakeComments.slice(0, useIsMobile() ? 4 : fakeComments.length).map((comment, index) => (
 					<SlideInSection key={index}>
 						<div key={comment.id} className="flex items-start gap-4 bg-zinc-900 p-4 rounded-xl cursor-pointer">
 							<Image

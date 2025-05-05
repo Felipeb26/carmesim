@@ -5,24 +5,26 @@ import Loader from "@/app/loading";
 import { SlideInSection } from "@/components/shared/animation/slidein";
 import ControlPageFlow from "@/components/shared/page/control-page-flow";
 import { Button } from "@/components/ui/button";
-import CalendarWithYearSelector from "@/components/ui/calendar.year";
+import { CalendarRangeWithYearSelector } from "@/components/ui/calendar.year";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRequest } from "@/hooks/query";
 import { formatarStringDate } from "@/utils/format";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, subYears } from "date-fns";
+import { addYears, format, subMonths, subYears } from "date-fns";
 import { CalendarIcon, Minus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { Form, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 
 const formSchema = z.object({
-	dataDe: z.date().min(new Date(), { message: "Data não pode ser futura" }),
-	dataAte: z.date().min(new Date(), { message: "Data não pode ser futura" }),
+	dataRange: z.object({
+		from: z.date().min(subYears(new Date(), 5), { message: "Data não pode ser futura" }),
+		to: z.date().min(subYears(new Date(), 5), { message: "Data não pode ser futura" }),
+	})
 });
 
 export default function Evento() {
@@ -31,8 +33,10 @@ export default function Evento() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			dataDe: new Date(),
-			dataAte: new Date()
+			dataRange: {
+				from: subMonths(new Date(), 2),
+				to: new Date()
+			}
 		},
 	});
 
@@ -85,9 +89,10 @@ export default function Evento() {
 		});
 	};
 
-
-	// Buscar eventos por data
-
+	const submitForm: SubmitHandler<FieldValues> = (campo) => {
+		const { from, to } = campo.dataRange
+		console.log(format(from, "yyyy-MM-dd"), format(to, "yyyy-MM-dd"))
+	}
 
 	const eventos = content.data
 	return (
@@ -101,69 +106,65 @@ export default function Evento() {
 					nextPage={handleChangePageChange}
 				>
 					<Form {...form}>
-						<form className="w-full grid grid-cols-2 gap-5 my-2">
-							<FormField
-								control={form.control}
-								name="dataDe"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Data de Nascimento</FormLabel>
-										<Popover>
-											<PopoverTrigger asChild>
-												<FormControl>
-													<Button variant={"outline"}>
-														{field.value ? (
-															format(
-																field.value,
-																"dd/MM/yyyy"
-															)
-														) : (
-															<span>
-																Selecione uma data
-															</span>
-														)}
-														<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-													</Button>
-												</FormControl>
-											</PopoverTrigger>
-											<PopoverContent
-												className="w-auto p-0"
-												align="start"
-											>
-												<CalendarWithYearSelector
-													minYear={1950}
-													maxYear={subYears(
-														new Date(),
-														16
-													).getFullYear()}
-													selected={field.value}
-													today={
-														new Date()
-													}
-													onSelect={(date) => {
-														if (date) {
-															field.onChange(date);
+						<form className="w-full flex flex-col gap-5 my-2 justify-center"
+							onSubmit={form.handleSubmit(submitForm)} autoComplete="on">
+							<div className="flex-1/2">
+								<FormField
+									control={form.control}
+									name="dataRange"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Data de Nascimento</FormLabel>
+											<Popover>
+												<PopoverTrigger asChild>
+													<FormControl className="bg-black hover:bg-black hover:text-white w-full">
+														<Button variant={"outline"}>
+															{field.value ? (
+																<span>
+																	{format(field.value.from || new Date(), "dd/MM/yyyy")}
+																	&nbsp;&nbsp;&nbsp;&nbsp;
+																	{format(field.value.to || new Date(), "dd/MM/yyyy")}
+																</span>
+															) : (
+																<span>
+																	Selecione uma data
+																</span>
+															)}
+															<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+														</Button>
+													</FormControl>
+												</PopoverTrigger>
+												<PopoverContent
+													className="w-auto p-0"
+													align="start"
+												>
+													<CalendarRangeWithYearSelector
+														minYear={2020}
+														maxYear={addYears(new Date(), 2).getFullYear()}
+														selected={field.value}
+														today={new Date()}
+														onSelect={(range) => {
+															if (range?.from && range?.to) {
+																field.onChange(range);
+															}
+														}}
+														onDisabled={(date) =>
+															date < new Date("1900-01-01")
 														}
-													}}
-													onDisabled={(date) =>
-														date >
-														subYears(new Date(), 10) ||
-														date < new Date("1900-01-01")
-													}
-												/>
-											</PopoverContent>
-										</Popover>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<button type="submit">
+													/>
+												</PopoverContent>
+											</Popover>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+							<Button type="submit" className="bg-[var(--color950)] border-2 max-w-[75%]">
 								enviar
-							</button>
+							</Button>
 						</form>
 					</Form>
 				</ControlPageFlow>
-
 
 				<div className="w-full  mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 					{eventos.map((evento, index) => (

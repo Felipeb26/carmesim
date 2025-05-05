@@ -1,6 +1,7 @@
-export interface APiPage {
-	page: number;
-	size: number;
+export interface APiPage<T = unknown> {
+	page?: number;
+	size?: number;
+	data?: T;
 	customHeaders?: CustomHeaders;
 }
 

@@ -1,28 +1,3 @@
-// "use server"
-
-// import { Instagram, Phone } from "lucide-react";
-
-// export default async function Footer() {
-//     return (
-//         <footer className="w-full bg-black text-gray-400 py-8 flex flex-col items-center space-y-4 text-sm">
-//             <div className="flex space-x-6">
-//                 <a href="https://instagram.com/seuPerfil" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 flex items-center gap-2 transition">
-//                     <Instagram size={18} />
-//                     Instagram
-//                 </a>
-//                 <a href="https://wa.me/seuNumero" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 flex items-center gap-2 transition">
-//                     <Phone size={18} />
-//                     WhatsApp
-//                 </a>
-//                 <a href="/politica-de-privacidade" className="hover:text-red-500 transition">
-//                     Política de Privacidade
-//                 </a>
-//             </div>
-//             <div className="text-gray-500">Studio Carmesim © {new Date().getFullYear()}</div>
-//         </footer>
-//     );
-// }
-
 import { Separator } from "@/components/ui/separator";
 import { Mail } from "lucide-react";
 import Link from "next/link";

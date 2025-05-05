@@ -1,16 +1,17 @@
+import CookieConsent from "@/components/shared/consent/coockie.consent";
+import FloatButton from "@/components/shared/float-button/float-button";
 import Footer from "@/components/shared/footer";
 import Header from "@/components/shared/header";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { CursorProvider } from "@/providers/cursor.provider";
 import Provider from "@/providers/query.provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import "./globals.css";
-import { CursorProvider } from "@/providers/cursor.provider";
 import { Suspense } from "react";
+import "./globals.css";
 import Loader from "./loading";
-import CookieConsent from "@/components/shared/consent/coockie.consent";
 
 
 export const metadata: Metadata = {
@@ -48,8 +49,9 @@ export default function RootLayout({
 					content="default-src 'self'; script-src 'self'; object-src 'none';"
 				/>
 				<link rel="icon" href="/icons/favicon.ico" />
+				<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 			</Head>
-			<body className={cn(`font-sans antialiased min-h-screen flex flex-col`, inter.className)}>
+			<body className={cn(`font-sans antialiased min-h-screen min-w-full flex flex-col`, inter.className)}>
 				<Toaster
 					position="top-right"
 					closeButton
@@ -58,17 +60,19 @@ export default function RootLayout({
 					theme="system"
 					visibleToasts={2}
 				/>
+				<div className="h-captcha" data-sitekey="9d16f80c-4208-4530-b410-a25cc9c8d1f0"></div>
+				<FloatButton />
 				<Header />
 				<Provider>
 					<CursorProvider>
 						<Suspense fallback={<Loader />}>
-							<main className="flex-1 flex flex-col flex-nowrap">
+							<div className="flex-1 flex flex-col flex-nowrap">
 								{children}
-							</main>
+							</div>
 						</Suspense>
 					</CursorProvider>
 				</Provider>
-				<CookieConsent/>
+				<CookieConsent />
 				<Footer />
 			</body>
 		</html>
