@@ -48,6 +48,7 @@ export default function RootLayout({
 					httpEquiv="Content-Security-Policy"
 					content="default-src 'self'; script-src 'self'; object-src 'none';"
 				/>
+				<script async defer src="https://tianji.batsworks.com.br/tracker.js" data-website-id="cmb8416nj0001455f6q737wff"></script>
 				<link rel="icon" href="/icons/favicon.ico" />
 				<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 			</Head>
