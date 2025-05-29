@@ -7,14 +7,16 @@ interface CustomRequest<T> {
     request: () => Promise<IException | T>
     refetchInterval?: number | false
     staleTime?: number
+		initialData?: T
 }
 
-export const useRequest = <T>({ key, enabled, request, refetchInterval = 1000 * 20, staleTime }: CustomRequest<T>) => {
+export const useRequest = <T>({ key, enabled, request, refetchInterval = 1000 * 20, staleTime, initialData }: CustomRequest<T>) => {
     return useQuery({
-        queryKey: key, queryFn: () => request(), enabled: enabled,
-        refetchInterval: refetchInterval,
-        staleTime: staleTime,
-        refetchIntervalInBackground: false,
-        refetchOnWindowFocus: true
+			queryKey: key, queryFn: () => request(), enabled: enabled,
+			refetchInterval: refetchInterval,
+			staleTime: staleTime,
+			refetchIntervalInBackground: false,
+			refetchOnWindowFocus: true,
+			initialData: initialData
     });
 }

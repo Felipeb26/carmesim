@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-	title: "Studio Carmesim | Contatos",
+	title: "Studio Carmesim | Galeria",
 };
 
 const obras: string[] = [

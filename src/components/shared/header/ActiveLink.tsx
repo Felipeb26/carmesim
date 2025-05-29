@@ -22,11 +22,12 @@ export function ActiveLink({
 	href,
 	children,
 	className,
-	activeClassName = "text-red-500",
+	activeClassName = "text-red-500 text-2xl",
 	...props
 }: ActiveLinkProps) {
-	const pathname = usePathname();
-	const isActive = pathname === href;
+	let pathname = usePathname();
+	pathname = pathname.length > 1 ? pathname.substring(0, pathname.length - 1) : pathname
+	const isActive = pathname === href || (pathname === "/" && href === "/");
 
 	const handleClick = () => {
 		const closeButton = window.document.getElementById("close-btn")
@@ -34,6 +35,7 @@ export function ActiveLink({
 			closeButton.click()
 		}
 	}
+
 
 	return (
 		<Link
