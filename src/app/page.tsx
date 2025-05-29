@@ -5,45 +5,12 @@ import AutoCarousel from "@/components/shared/carrousel/autocarrousel";
 import Instagram from "@/components/shared/icons/Instagram";
 import WhatsApp from "@/components/shared/icons/Whatsapp";
 import { CardTitle } from "@/components/ui/card";
+import { ARTISTAS, IMAGES } from "@/lib/constants";
 import { Calendar } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default async function Home() {
-
-
-	const images: string[] = [
-		"/images/animal_0.webp",
-		"/images/animal.webp",
-		"/images/leg.webp",
-		"/images/mandala.webp",
-		"/images/pecoco.webp",
-		"/images/pombo-tattoo.webp",
-		"/images/realismo_0.webp",
-		"/images/realismo_1.webp",
-		"/images/seio_tattoo.webp",
-	]
-
-	const artistas: string[] = [
-		"/images/women-tattoo.webp",
-		"/images/women-tattoo-floral.webp",
-		"/images/secretario.webp"
-	]
-	async function gotoScreenArtistas() {
-		"use server"
-		redirect("/artistas")
-	}
-
-	async function gotoScreenGaleria() {
-		"use server"
-		redirect("/galeria")
-	}
-
-	async function gotoScreenContatos() {
-		"use server"
-		redirect("/contatos")
-	}
 
 	return (
 		<main className="flex-1 flex-col">
@@ -146,16 +113,14 @@ export default async function Home() {
 							height={240}
 						/>
 					</div>
-					<div
-						onClick={gotoScreenGaleria}
+					<Link href={"galeria"}
 						className="flex flex-col lg:px-10 transition-all duration-700 opacity-0 animate-[fadeIn_0.7s_forwards] gap-2 cursor-pointer">
 						<h1 className="capitalize font-bold text-2xl">Galeria</h1>
 						<div className="bg-[#710101] p-2 rounded-sm flex justify-center items-center hover:brightness-125 hover:scale-105 transition-all duration-800">
-							<AutoCarousel images={images} />
+							<AutoCarousel images={IMAGES} />
 						</div>
-					</div>
-					<div
-						onClick={gotoScreenContatos}
+					</Link>
+					<Link href={"contatos"}
 						className="flex flex-col lg:px-10 transition-all duration-700 opacity-0 animate-[fadeIn_0.7s_forwards] gap-2 cursor-pointer">
 						<h1 className="capitalize font-bold text-2xl">Agendamento</h1>
 						<div className="bg-transparent border-2 p-2 rounded-sm flex justify-center items-center hover:brightness-125 hover:scale-105 transition-all duration-800">
@@ -167,14 +132,14 @@ export default async function Home() {
 								height={240}
 							/>
 						</div>
-					</div>
-					<div onClick={gotoScreenArtistas}
+					</Link>
+					<Link href={"artistas"}
 						className="flex flex-col lg:px-10 transition-all duration-700 opacity-0 animate-[fadeIn_0.7s_forwards] gap-2 cursor-pointer">
 						<h1 className="capitalize font-bold text-2xl">Artistas</h1>
 						<div className="bg-[#710101] p-2 rounded-sm flex justify-center items-center hover:brightness-125 hover:scale-105 transition-all duration-800">
-							<AutoCarousel images={artistas} time={7000} />
+							<AutoCarousel images={ARTISTAS} time={7000} />
 						</div>
-					</div>
+					</Link>
 				</SlideInSection>
 			</section>
 		</main>

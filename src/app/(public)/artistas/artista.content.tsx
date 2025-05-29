@@ -5,6 +5,7 @@ import Loader from "@/app/loading"
 import { SlideInSection } from "@/components/shared/animation/slidein"
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useRequest } from "@/hooks/query"
+import { ARTISTAS } from "@/lib/constants"
 import { IPagination } from "@/types/api/IPgaination"
 import { IException } from "@/types/errors/IException"
 import { IFuncionario } from "@/types/IFuncionario"
@@ -14,12 +15,6 @@ import { Suspense, useState } from "react"
 
 
 export default function ArtistasContent({ initialData }: { initialData: IException | IPagination<IFuncionario> }) {
-
-	const photos: string[] = [
-		"/images/women-tattoo.webp",
-		"/images/women-tattoo-floral.webp",
-		"/images/secretario.webp"
-	]
 
 	const [page] = useState({ page: 0, size: 10 });
 
@@ -84,7 +79,7 @@ export default function ArtistasContent({ initialData }: { initialData: IExcepti
 								</CardTitle>
 								<Image
 									className="w-full aspect-square rounded-md max-h-[350px]"
-									src={photos[index]}
+									src={ARTISTAS[index]}
 									alt={`IMagem de numero ${index}`}
 									width={240}
 									height={240}

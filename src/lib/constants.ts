@@ -51,3 +51,21 @@ export const FAKE_COMMENTS = [
 		likes: 22,
 	}
 ];
+
+export const IMAGES: string[] = [
+	"/images/animal_0.webp",
+	"/images/animal.webp",
+	"/images/leg.webp",
+	"/images/mandala.webp",
+	"/images/pecoco.webp",
+	"/images/pombo-tattoo.webp",
+	"/images/realismo_0.webp",
+	"/images/realismo_1.webp",
+	"/images/seio_tattoo.webp",
+]
+
+export const ARTISTAS: string[] = [
+	"/images/women-tattoo.webp",
+	"/images/women-tattoo-floral.webp",
+	"/images/secretario.webp"
+]
