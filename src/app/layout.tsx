@@ -75,12 +75,7 @@ export default function RootLayout({
 				</Provider>
 				<CookieConsent />
 				<Footer />
-				<Script
-					async
-					defer
-					src="https://tianji.batsworks.com.br/tracker.js"
-					data-website-id="cmb8416nj0001455f6q737wff"
-				/>
+    <Script async defer src="https://tianji.batsworks.com.br/tracker.js"   data-website-id="cmbghxvrz000214fhy8pcoqoj"></Script>
 			</body>
 		</html>
 	);
