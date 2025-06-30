@@ -75,7 +75,7 @@ export default function RootLayout({
 				</Provider>
 				<CookieConsent />
 				<Footer />
-				<script defer src="https://umami.batsworks.com.br/script.js" data-website-id="1a47f07c-b10f-4f03-a84b-30e8c757b028"></script>
+				<Script async defer src="https://umami.batsworks.com.br/script.js" data-website-id="1a47f07c-b10f-4f03-a84b-30e8c757b028"></Script>
 			</body>
 		</html>
 	);
