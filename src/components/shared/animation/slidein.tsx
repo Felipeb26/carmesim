@@ -7,6 +7,9 @@ export function SlideInSection({ className, children }: { className?: string, ch
 	const [isVisible, setIsVisible] = useState(false);
 
 	useEffect(() => {
+		const node = ref.current;
+		if (!node) return;
+
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				setIsVisible(entry.isIntersecting);
@@ -14,14 +17,12 @@ export function SlideInSection({ className, children }: { className?: string, ch
 			{ threshold: 0.2 } // 20% do elemento precisa aparecer
 		);
 
-		if (ref.current) {
-			observer.observe(ref.current);
+		if (node) {
+			observer.observe(node);
 		}
 
 		return () => {
-			if (ref.current) {
-				observer.unobserve(ref.current);
-			}
+			observer.unobserve(node);
 		};
 	}, []);
 

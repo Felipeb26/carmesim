@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useCursor } from "@/providers/cursor.provider";
+import { loginSchema } from "@/types/login/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Github } from "lucide-react";
 import Image from "next/image";
@@ -23,21 +24,9 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const formSchema = z.object({
-	username: z
-		.string()
-		.min(6, "Username minimo é de 6 caracters")
-		.max(50, "Username deve contem maximo de 50 caracters"),
-	email: z.string().email("Email invalido"),
-	senha: z
-		.string()
-		.min(4, "Senha deve ter minimo de 4 caracters")
-		.max(10, "Senha tem no maximo 10 caracters"),
-});
-
 export default function Login() {
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
+	const form = useForm<z.infer<typeof loginSchema>>({
+		resolver: zodResolver(loginSchema),
 		defaultValues: {
 			username: "",
 			email: "",

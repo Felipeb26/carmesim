@@ -8,12 +8,14 @@ interface ActiveLinkProps extends LinkProps {
 	children: ReactNode;
 	activeClassName?: string;
 	className?: string;
+	prefetch?: boolean
 }
 
 interface ActiveListLinkProps extends LinkProps {
 	children: ReactNode;
 	activeClassName?: string;
 	className?: string;
+	prefetch?: boolean;
 	listClassName?: string;
 	icon: ReactElement<SVGAElement>
 }
@@ -23,6 +25,7 @@ export function ActiveLink({
 	children,
 	className,
 	activeClassName = "text-red-500 text-2xl",
+	prefetch = false,
 	...props
 }: ActiveLinkProps) {
 	let pathname = usePathname();
@@ -40,6 +43,7 @@ export function ActiveLink({
 	return (
 		<Link
 			href={href}
+			prefetch={prefetch}
 			className={`${className} ${isActive ? activeClassName : ""}`}
 			onClick={handleClick}
 			{...props}
@@ -55,6 +59,7 @@ export function ActiveListLink({
 	className,
 	activeClassName = "text-red-500",
 	listClassName = "link flex flex-nowrap items-center gap-5 my-2 py-2 w-full",
+	prefetch = false,
 	icon: Icon,
 	...props
 }: ActiveListLinkProps) {
@@ -77,6 +82,7 @@ export function ActiveListLink({
 			{element}
 			<Link
 				href={href}
+				prefetch={prefetch}
 				className={`${className} ${isActive ? activeClassName : ""}`}
 				onClick={handleClick}
 				{...props}
