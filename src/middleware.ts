@@ -13,8 +13,8 @@ const publicRoutes: PublicRoute[] = [
   { path: "/auth/", whenAuthenticated: "redirect" },
   { path: "/auth/login/", whenAuthenticated: "redirect" },
   { path: "/criar-login/", whenAuthenticated: "redirect" },
-  { path: "/politicas/cookies", whenAuthenticated: "next" },
-  { path: "/politicas/privacidade", whenAuthenticated: "next" },
+  { path: "/politicas/cookies/", whenAuthenticated: "next" },
+  { path: "/politicas/privacidade/", whenAuthenticated: "next" },
 ] as const;
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED = "/auth/login";
