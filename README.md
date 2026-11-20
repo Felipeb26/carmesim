@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Carmesim Studio
 
-## Getting Started
+Website for a tattoo studio: presents the studio, its artists and work, explains how booking works, and sends visitors to WhatsApp to schedule.
 
-First, run the development server:
+🔗 **Live:** [carmesim-ecru.vercel.app](https://carmesim-ecru.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+<!-- Add a screenshot: ![Home](docs/home.png) -->
+
+## Features
+
+- **Landing page** with the studio's pitch, a 4-step "how it works" flow, what to expect and tips to prepare for a session
+- **Gallery** with image carousels
+- **Artists**, **Events** and **Contact/booking** pages
+- **Contact form** with schema validation and hCaptcha bot protection
+- **WhatsApp call-to-action** with a pre-filled message
+- **Privacy and cookie policy** pages
+- Installable web manifest, optimized `.webp` images, light/dark theme support
+
+## Stack
+
+| Area | Tools |
+|---|---|
+| Framework | Next.js 15 (App Router, Server Actions, middleware), React 19 |
+| Language | TypeScript |
+| UI | Tailwind CSS v4, Radix UI primitives (shadcn/ui-style components), Lucide icons, Sonner toasts |
+| Data & forms | TanStack Query, React Hook Form + Zod |
+| Other | hCaptcha, date-fns + react-day-picker, next-themes |
+| Deploy | Vercel |
+
+## Project structure
+
+```
+src/
+├── actions/      # server actions
+├── app/          # routes (App Router)
+├── components/   # UI components
+├── hooks/        # custom hooks
+├── lib/          # shared helpers and config
+├── providers/    # React context providers
+├── services/     # API/service layer
+├── types/        # TypeScript types
+├── utils/        # utilities
+└── middleware.ts
+public/           # icons, images, web manifest
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+git clone <repo-url>
+cd carmesim
+npm install
+cp .env.example .env.local
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Scripts: `dev` (Turbopack), `build`, `start`, `lint`.
 
-## Learn More
+<!-- Create .env.example and list the required variables (hCaptcha keys, API URL, contact info...) -->
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All rights reserved.
